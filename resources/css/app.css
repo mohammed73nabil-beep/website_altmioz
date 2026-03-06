@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* From Uiverse.io by Madflows */
+.toggle-switch {
+  position: relative;
+  width: 70px;
+  /* Scaled down slightly to fit navbar better */
+  height: 35px;
+  --light: #d8dbe0;
+  --dark: #28292c;
+  --link: rgb(27, 129, 112);
+  --link-hover: rgb(24, 94, 82);
+}
+
+.switch-label {
+  position: absolute;
+  width: 100%;
+  height: 35px;
+  background-color: var(--dark);
+  border-radius: 17.5px;
+  cursor: pointer;
+  border: 2px solid var(--dark);
+}
+
+.checkbox {
+  position: absolute;
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 17.5px;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked~.slider {
+  background-color: var(--light);
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  -webkit-box-shadow: inset 8px -3px 0px 0px var(--light);
+  box-shadow: inset 8px -3px 0px 0px var(--light);
+  background-color: var(--dark);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.checkbox:checked~.slider::before {
+  -webkit-transform: translateX(34px);
+  -ms-transform: translateX(34px);
+  transform: translateX(34px);
+  background-color: var(--dark);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* Glass Radio Group Navigation */
+.glass-radio-group {
+  --bg: rgba(255, 255, 255, 0.06);
+  --text: #e5e5e5;
+
+  display: flex;
+  position: relative;
+  background: var(--bg);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 1px 1px 4px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 6px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  width: fit-content;
+}
+
+/* For dark mode */
+.dark .glass-radio-group {
+  --bg: rgba(11, 31, 58, 0.3);
+  --text: #e5e5e5;
+  box-shadow:
+    inset 1px 1px 4px rgba(255, 255, 255, 0.1),
+    inset -1px -1px 6px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.glass-radio-group .glass-label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  font-size: 15px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  color: #000;
+  /* تغيير لون النص إلى الأسود في الوضع الفاتح */
+  position: relative;
+  z-index: 2;
+  transition: color 0.3s ease-in-out;
+  text-decoration: none;
+}
+
+.glass-radio-group .glass-label:hover {
+  color: #dba61f;
+}
+
+.glass-radio-group .glass-label.active {
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.dark .glass-radio-group .glass-label {
+  color: #cbd5e1;
+}
+
+.dark .glass-radio-group .glass-label:hover {
+  color: white;
+}
+
+.glass-glider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 1rem;
+  z-index: 1;
+  transition:
+    transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56),
+    background 0.4s ease-in-out,
+    box-shadow 0.4s ease-in-out;
+  background: linear-gradient(135deg, #dba61f55, #dba61f);
+  box-shadow:
+    0 0 18px rgba(219, 166, 31, 0.5),
+    0 0 10px rgba(232, 192, 79, 0.4) inset;
+}
+
+/* Utilities for Mobile Navbar Links */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.mask-linear {
+  mask-image: linear-gradient(to right,
+      black calc(100% - 20px),
+      transparent 100%);
+  -webkit-mask-image: linear-gradient(to right,
+      black calc(100% - 20px),
+      transparent 100%);
+}
+
+/* Animated Hamburger Button (from Uiverse.io by dugepard) */
+.hamburger-check {
+  display: none;
+}
+
+.hamburger-button {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.hamburger-button div {
+  width: 100%;
+  height: 3px;
+  background-color: currentColor;
+  border-radius: 3px;
+  position: absolute;
+  transition: 0.4s;
+  left: 0;
+}
+
+.hamburger-button .h-line1 {
+  top: 0;
+}
+
+.hamburger-button .h-line2 {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburger-button .h-line3 {
+  bottom: 0;
+}
+
+.hamburger-button.is-open .h-line1 {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.hamburger-button.is-open .h-line2 {
+  opacity: 0;
+  transform: translateX(-8px) translateY(-50%);
+}
+
+.hamburger-button.is-open .h-line3 {
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+}

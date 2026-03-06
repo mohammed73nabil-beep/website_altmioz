@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Inertia\Middleware;
+
+class HandleInertiaRequests extends Middleware
+{
+    /**
+     * The root template that is loaded on the first page visit.
+     *
+     * @var string
+     */
+    protected $rootView = 'app';
+
+    /**
+     * Determine the current asset version.
+     */
+    public function version(Request $request): ?string
+    {
+        return parent::version($request);
+    }
+
+    /**
+     * Define the props that are shared by default.
+     *
+     * @return array<string, mixed>
+     */
+    public function share(Request $request): array
+    {
+        // FIX #1: Cache settings so we don't hit the DB on every request.
+        $settings = Cache::rememberForever('global_settings', function () {
+            return \App\Models\Setting::all()->mapWithKeys(function ($item) {
+                return [$item->key => [
+                    'value' => $item->value,
+                    'group' => $item->group,
+                    'type'  => $item->type,
+                ]];
+            })->toArray();
+        });
+
+        // FIX #1 (cont.): Fetch the published content collection ONCE, then
+        // map it twice from the in-memory collection — zero extra DB queries.
+        $publishedContents = Cache::rememberForever('published_page_contents', function () {
+            return \App\Models\Content::where('status', 'published')->get();
+        });
+
+        $pageContents = $publishedContents->mapWithKeys(function ($item) {
+            return [$item->key => $item->value];
+        })->toArray();
+
+        $pageContentExtras = $publishedContents->mapWithKeys(function ($item) {
+            return [$item->key => $item->extra_value];
+        })->toArray();
+
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user(),
+            ],
+            'globalSettings' => $settings,
+            'pageContents' => $pageContents,
+            'pageContentExtras' => $pageContentExtras,
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+                'success' => fn () => $request->session()->get('success')
+            ]
+        ];
+    }
+}

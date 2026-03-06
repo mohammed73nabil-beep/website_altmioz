@@ -1,0 +1,176 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BackgroundController;
+use App\Http\Controllers\Admin\ProjectRequestController;
+use App\Http\Controllers\Admin\SiteContentController;
+use App\Http\Controllers\PublicProjectController;
+
+
+Route::get('/', function () {
+    // Fix #14: cache the unbounded SiteContent::all() and homepage data
+    $contents = Cache::remember('home_site_contents', 600, function () {
+        return \App\Models\SiteContent::all()->pluck('value', 'key');
+    });
+    $projects = Cache::remember('home_projects', 600, function () {
+        return \App\Models\Project::latest()->take(6)->get();
+    });
+    $galleryImages = Cache::remember('gallery_page_home', 600, function () {
+        return \App\Models\GalleryImage::where('page', 'home')->orderBy('order')->get();
+    });
+
+    return Inertia::render('Welcome', [
+        'canLogin'       => Route::has('login'),
+        'canRegister'    => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion'     => PHP_VERSION,
+        'siteContents'   => $contents,
+        'projects'       => $projects,
+        'galleryImages'  => $galleryImages,
+    ]);
+})->name('home');
+
+Route::get('/contact-us', function () {
+    return Inertia::render('ContactUs');
+})->name('contact');
+
+Route::get('/services', function () {
+    return Inertia::render('Public/Services/Index', [
+        // Fix #5: cache projects and gallery for services index
+        'projects'     => Cache::remember('services_projects', 600, fn () =>
+            \App\Models\Project::latest()->take(4)->get()
+        ),
+        'galleryImages' => Cache::remember('gallery_page_services', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'services')->orderBy('order')->get()
+        ),
+    ]);
+})->name('services.index');
+
+Route::get('/services/caravans', function () {
+    // Fix #5: cache contents + gallery per page with 10-min TTL
+    $contents = Cache::remember('page_contents_caravans', 600, function () {
+        return \App\Models\Content::where('page', 'صيانة الكرفانات')->get();
+    });
+    return Inertia::render('Public/Services/Caravans', [
+        'projects'          => Cache::remember('projects_caravans', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%كرفان%')
+                ->orWhere('title', 'like', '%كرفان%')
+                ->latest()->take(4)->get()
+        ),
+        'pageContents'      => $contents->pluck('value', 'key'),
+        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
+        'galleryImages'     => Cache::remember('gallery_page_caravans', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'caravans')->orderBy('order')->get()
+        ),
+    ]);
+})->name('services.caravans');
+
+Route::get('/services/portacabins', function () {
+    $contents = Cache::remember('page_contents_portacabins', 600, function () {
+        return \App\Models\Content::where('page', 'صيانة البركسات')->get();
+    });
+    return Inertia::render('Public/Services/Portacabins', [
+        'projects'          => Cache::remember('projects_portacabins', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%بركس%')
+                ->orWhere('title', 'like', '%بركس%')
+                ->latest()->take(4)->get()
+        ),
+        'pageContents'      => $contents->pluck('value', 'key'),
+        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
+        'galleryImages'     => Cache::remember('gallery_page_portacabins', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'portacabins')->orderBy('order')->get()
+        ),
+    ]);
+})->name('services.portacabins');
+
+Route::get('/services/buildings', function () {
+    $contents = Cache::remember('page_contents_buildings', 600, function () {
+        return \App\Models\Content::where('page', 'صيانة المباني')->get();
+    });
+    return Inertia::render('Public/Services/Buildings', [
+        'projects'          => Cache::remember('projects_buildings', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%مبان%')
+                ->orWhere('title', 'like', '%مبان%')
+                ->latest()->take(4)->get()
+        ),
+        'pageContents'      => $contents->pluck('value', 'key'),
+        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
+        'galleryImages'     => Cache::remember('gallery_page_buildings', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'buildings')->orderBy('order')->get()
+        ),
+    ]);
+})->name('services.buildings');
+
+
+
+Route::get('/about-us', function () {
+    return Inertia::render('Public/About/Index');
+})->name('about');
+
+Route::get('/our-projects', [PublicProjectController::class, 'index'])->name('our-projects.index');
+Route::get('/our-projects/{project}', [PublicProjectController::class, 'show'])->name('our-projects.show');
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Content Manager (CMS V3)
+    Route::get('/contents', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('contents.index');
+    Route::post('/contents', [\App\Http\Controllers\Admin\ContentController::class, 'store'])->name('contents.store');
+    Route::post('/contents/bulk-update/{page}', [\App\Http\Controllers\Admin\ContentController::class, 'bulkUpdate'])->name('contents.bulk-update');
+    Route::post('/contents/{content}', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('contents.update');
+    Route::delete('/contents/{content}', [\App\Http\Controllers\Admin\ContentController::class, 'destroy'])->name('contents.destroy');
+
+    // Site Settings
+    Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+    // Background Management
+    Route::get('/backgrounds', [BackgroundController::class, 'index'])->name('backgrounds.index');
+    Route::post('/backgrounds/{content}', [BackgroundController::class, 'update'])->name('backgrounds.update');
+    Route::delete('/backgrounds/{content}', [BackgroundController::class, 'destroy'])->name('backgrounds.destroy');
+
+    // Gallery Images
+    Route::get('/gallery', [\App\Http\Controllers\Admin\GalleryController::class, 'index'])->name('gallery.index');
+    Route::post('/gallery', [\App\Http\Controllers\Admin\GalleryController::class, 'store'])->name('gallery.store');
+    Route::post('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'update'])->name('gallery.update');
+    Route::delete('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'destroy'])->name('gallery.destroy');
+
+    // Portfolio Projects (CMS)
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::post('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // Project Requests (Form Submissions)
+    Route::get('/project-requests', [ProjectRequestController::class, 'index'])->name('project-requests.index');
+    Route::put('/project-requests/{projectRequest}/status', [ProjectRequestController::class, 'updateStatus'])->name('project-requests.status');
+    Route::delete('/project-requests/{projectRequest}', [ProjectRequestController::class, 'destroy'])->name('project-requests.destroy');
+
+    Route::get('/content', [SiteContentController::class, 'index'])->name('content.index');
+    Route::post('/content', [SiteContentController::class, 'store'])->name('content.store');
+    Route::delete('/content/{siteContent}', [SiteContentController::class, 'destroy'])->name('content.destroy');
+
+    Route::get('/content', [SiteContentController::class, 'index'])->name('content.index');
+    Route::post('/content', [SiteContentController::class, 'store'])->name('content.store');
+    Route::delete('/content/{siteContent}', [SiteContentController::class, 'destroy'])->name('content.destroy');
+});
+
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.avatar.upload');
+    Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
+});
+
+require __DIR__.'/auth.php';

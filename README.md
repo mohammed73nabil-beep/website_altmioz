@@ -10,10 +10,10 @@
 ## من أنا
 مهندس برمجيات ومهندس ذكاء اصطناعي مختص بتصميم ونشر حلول تعتمد على نماذج اللغة الكبيرة (Large Language Models) وخدمات Azure OpenAI. أعمل على تحويل الاحتياجات التجارية إلى أنظمة ذكية يمكنها التعلّم والتكيف وتحسين المنتج باستمرار.
 
-- الموقع: [Beep] (أو المدينة/الدولة)
+- الموقع: [https://shop-mohammed.wuaze.com] ( ibb/Yemen)
 - الوظيفة الحالية: مهندس ذكاء اصطناعي في Beep (أو الحرّ)
-- سنوات الخبرة: (ضع عدد السنوات)
-- اللغات: العربية (اللغة الأم) · الإنجليزية (احترافي)
+- سنوات الخبرة: (4)
+- اللغات: العربية (اللغة الأم) · الإنجليزية (متوسط)
 
 ---
 
@@ -34,17 +34,17 @@
 ## نقاط القوة (بصيغة قابلة للقياس)
 - بناء ونشر نماذج GPT على Azure OpenAI لتطبيقات الدردشة وتحليل النصوص.  
 - تصميم أنظمة إنتاجية قابلة للتوسع باستخدام Docker وKubernetes.  
-- تحسين معدل دقة نموذج تصنيف/تنبؤ بنسبة (ضع النسبة) من خلال هندسة الميزات وFine-tuning.  
+- تحسين معدل دقة نموذج تصنيف/تنبؤ بنسبة (89%) من خلال هندسة الميزات وFine-tuning.  
 - تنفيذ أنظمة CI/CD لتدفق النماذج والتطبيقات (GitHub Actions / Azure DevOps).
 
 ---
 
 ## المهارات التقنية
-- لغات برمجة: Python · JavaScript/TypeScript · C# · SQL  
+- لغات برمجة: Python · JavaScript/TypeScript · laravel · SQL  
 - نماذج وتعلّم آلي: Transformers (HuggingFace) · PyTorch · TensorFlow · scikit-learn  
 - منصات سحابية وخدمات AI: Azure OpenAI · Azure ML · Azure Functions · AWS (S3, Lambda)  
 - هندسة: Docker · Kubernetes · Terraform · GitHub Actions  
-- قواعد بيانات: PostgreSQL · MongoDB · Redis  
+- قواعد بيانات: Mysql · MongoDB · Redis  
 - أدوات: Git · pytest · FastAPI · Django · React  
 - ممارسات: TDD · Clean Architecture · Monitoring (Prometheus + Grafana)
 
@@ -132,7 +132,7 @@ print(response.choices[0].message.content)
 ---
 
 ## سيرة ذاتية / معرض أعمال
-- سيرة قابلة للتحميل (PDF): [سيرة محمد نبيل ](https://shop-mohammed.wuaze.com/)  ← استبدل بالرابط الحقيقي
+- سيرة قابلة للتحميل (PDF): [سيرة محمد نبيل ](https://shop-mohammed.wuaze.com/)  ←
 - معرض المشاريع (Portfolio): ((https://shop-mohammed.wuaze.com)
 
 ---
@@ -166,8 +166,8 @@ print(response.choices[0].message.content)
 
 ## تواصل
 - GitHub: [mohammed73nabil-beep](https://github.com/mohammed73nabil-beep)  
-- LinkedIn: [mohammed.73.nabil](https://linkedin.com/in/mohammed73nabil)  
+- LinkedIn: [mohammed.73.nabil](https://linkedin.com/in/mohammed.73.nabil)  
 - البريد الإلكتروني: mohammed.73.nabil@gmail.com  
-- x: [@mohammed.73.nabil](https://x.com/mohammed73nabil)
+- x: [@mohammed.73.nabil](https://x.com/mohammed.73.nabil)
 
 

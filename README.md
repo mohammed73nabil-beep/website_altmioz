@@ -2,7 +2,7 @@
 
 [![GitHub followers](https://img.shields.io/github/followers/mohammed73nabil-beep?style=social)](https://github.com/mohammed73nabil-beep)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/mohammed73nabil)
-[![Email](https://img.shields.io/badge/Email-mohammed73nabil%40example.com-green)](mailto:mohammed73nabil@example.com)
+[![Email](https://img.shields.io/badge/Email-mohammed73nabil%40example.com-green)](mailto:mohammed.73.nabil@example.com)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mohammed73nabil-beep&layout=compact)](https://github.com/mohammed73nabil-beep)
 
 ---

@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\BackgroundController;
 use App\Http\Controllers\Admin\ProjectRequestController;
 use App\Http\Controllers\Admin\SiteContentController;
 use App\Http\Controllers\PublicProjectController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 
 
 Route::get('/', function () {
@@ -116,6 +118,9 @@ Route::get('/about-us', function () {
 Route::get('/our-projects', [PublicProjectController::class, 'index'])->name('our-projects.index');
 Route::get('/our-projects/{project}', [PublicProjectController::class, 'show'])->name('our-projects.show');
 
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
+
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -146,6 +151,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::post('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+    // Blog Management
+    Route::resource('posts', AdminPostController::class);
+    Route::post('posts/{post}/toggle-publish', [AdminPostController::class, 'togglePublish'])->name('posts.toggle-publish');
+
 
     // Project Requests (Form Submissions)
     Route::get('/project-requests', [ProjectRequestController::class, 'index'])->name('project-requests.index');

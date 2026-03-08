@@ -1,171 +1,171 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import FloatingContact from './FloatingContact';
 import DynamicIcon from '@/Components/DynamicIcon';
 
+// --- مكون الروابط الذكي ---
+const NavLink = memo(({ link, closeMenu, variant = 'desktop' }) => {
+    const isMobileSidebar = variant === 'mobile-sidebar';
+    const isQuickBar = variant === 'quick-bar';
+
+    // التنسيقات الأساسية
+    const baseClasses = "transition-all duration-300 font-bold whitespace-nowrap flex items-center justify-center";
+    
+    // تحديد الشكل بناءً على المكان
+    let styleClasses = "";
+    if (isMobileSidebar) {
+        styleClasses = `w-full px-5 py-4 rounded-xl text-lg ${
+            link.active ? 'bg-[#dba61f]/10 text-[#dba61f] border-r-4 border-[#dba61f]' : 'text-gray-700 dark:text-gray-300'
+        }`;
+    } else if (isQuickBar) {
+        styleClasses = `px-4 py-2 rounded-full text-[13px] border transition-transform active:scale-95 ${
+            link.active 
+            ? 'bg-[#dba61f] text-white border-[#dba61f] shadow-sm' 
+            : 'bg-white dark:bg-white/5 text-gray-700 dark:text-gray-300 border-gray-100 dark:border-white/10'
+        }`;
+    } else {
+        styleClasses = `px-2 lg:px-3 py-2 rounded-lg text-[13px] lg:text-[14px] ${
+            link.active ? 'text-[#dba61f] bg-[#dba61f]/5' : 'text-gray-700 dark:text-gray-200 hover:text-[#dba61f]'
+        }`;
+    }
+
+    return (
+        <li className={isMobileSidebar ? "w-full" : "shrink-0 flex"}>
+            <Link href={link.href} onClick={closeMenu} className={`${baseClasses} ${styleClasses}`}>
+                {link.name}
+            </Link>
+        </li>
+    );
+});
+
 export default function Navbar() {
-    const { auth, globalSettings } = usePage().props;
-    const siteName = globalSettings?.site_name?.value || 'صيانة وفخامة';
+    const { globalSettings } = usePage().props;
+    const siteName = globalSettings?.site_name?.value || 'الريادة في البناء والصيانة';
     const [isOpen, setIsOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
+    // إدارة الوضع الداكن
     useEffect(() => {
-        // Initialize dark mode from localStorage or system preference
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             setIsDarkMode(true);
             document.documentElement.classList.add('dark');
-        } else {
-            setIsDarkMode(false);
-            document.documentElement.classList.remove('dark');
         }
     }, []);
 
     const toggleDarkMode = () => {
-        if (isDarkMode) {
-            document.documentElement.classList.remove('dark');
-            localStorage.theme = 'light';
-            setIsDarkMode(false);
-        } else {
-            document.documentElement.classList.add('dark');
-            localStorage.theme = 'dark';
-            setIsDarkMode(true);
-        }
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        document.documentElement.classList.toggle('dark');
+        localStorage.theme = newMode ? 'dark' : 'light';
     };
 
+    // منع تمرير الصفحة عند فتح المنيو
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+    }, [isOpen]);
+
+    // مصفوفة الروابط كاملة (9 روابط)
     const navLinks = [
         { name: 'الرئيسية', href: route('home'), active: route().current('home') },
-        { name: 'من نحن', href: route('about'), active: route().current('about') },
-        { name: 'الخدمات', href: route('services.index'), active: route().current('services.index') },
+        { name: 'الخدمات', href: route('services.index'), active: route().current('services.*') },
         { name: 'صيانة الكرفانات', href: route('services.caravans'), active: route().current('services.caravans') },
         { name: 'صيانة البركسات', href: route('services.portacabins'), active: route().current('services.portacabins') },
         { name: 'صيانة المباني', href: route('services.buildings'), active: route().current('services.buildings') },
+        { name: 'المدونة', href: route('blog.index'), active: route().current('blog.*') },
         { name: 'مشاريعنا', href: route('our-projects.index'), active: route().current('our-projects.*') },
+        { name: 'من نحن', href: route('about'), active: route().current('about') },
         { name: 'اتصل بنا', href: route('contact'), active: route().current('contact') },
     ];
 
+    // روابط الوصول السريع للموبايل
+    const mobilePriorityLinks = navLinks.filter(link => 
+        ['الخدمات', 'صيانة الكرفانات', 'المدونة', 'مشاريعنا'].includes(link.name)
+    );
+
     return (
         <>
-            {/* Header Wrapper */}
-            <div className="fixed z-50 top-3 left-3 right-3 lg:top-6 lg:left-8 lg:right-8 flex items-center gap-3 md:gap-5 pointer-events-none" dir="rtl">
-
-                <Link href={route('home')} className="pointer-events-auto flex items-center justify-center bg-white/85 dark:bg-[#0B1F3A]/85 backdrop-blur-xl w-[3.5rem] h-[3.5rem] md:w-14 md:h-14 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white/50 dark:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg shrink-0 group">
-                    <DynamicIcon name="rv_hookup" className="text-[#9037e8] text-2xl md:text-3xl group-hover:rotate-[15deg] transition-transform duration-300 drop-shadow-md" />
-                </Link>
-
-                <nav className="pointer-events-auto relative flex-1 transition-all duration-500 bg-white/85 dark:bg-[#0B1F3A]/85 backdrop-blur-xl rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgba(201,162,39,0.08)] border border-white/50 dark:border-white/10">
-                    <div className="px-4 xl:px-8 w-full">
-                        <div className="flex items-center justify-end md:justify-between h-14 md:h-16">
-                            {/* Desktop Menu */}
-                            <div className="hidden md:block">
-                                <div className="glass-radio-group relative z-50" style={{ direction: 'rtl' }}>
-                                    {navLinks.map((link, index) => (
-                                        <Link
-                                            key={index}
-                                            href={link.href}
-                                            className={`glass-label ${link.active ? 'active' : ''}`}
-                                        >
-                                            {link.name}
-                                        </Link>
-                                    ))}
-                                    {(() => {
-                                        const activeIndex = navLinks.findIndex(link => link.active);
-                                        if (activeIndex === -1) return null;
-                                        return (
-                                            <div
-                                                className="glass-glider"
-                                                style={{
-                                                    right: `${(activeIndex * 100) / navLinks.length}%`,
-                                                    transform: `translateX(0)`,
-                                                    width: `${100 / navLinks.length}%`
-                                                }}
-                                            ></div>
-                                        );
-                                    })()}
-                                </div>
-                            </div>
-
-                            {/* Desktop CTA & Theme Toggle */}
-                            <div className="hidden md:flex items-center gap-4">
-                                <div className="toggle-switch scale-90 origin-right ml-2" title={isDarkMode ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'}>
-                                    <label className="switch-label">
-                                        <input type="checkbox" className="checkbox" checked={!isDarkMode} onChange={toggleDarkMode} />
-                                        <span className="slider"></span>
-                                    </label>
-                                </div>
-
-                                <Link className="bg-gradient-to-r from-[#dba61f] to-[#e8c04f] hover:from-[#7d9bc2] hover:to-[#647386] text-white font-bold py-2.5 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 inline-flex items-center gap-2" href={route('contact')}>
-                                    <span>تواصل معنا</span>
-                                    <DynamicIcon name="arrow_forward" className="text-sm rotate-180" />
-                                </Link>
-                            </div>
-
-                            {/* Mobile Quick Links & Theme Toggle Button (Left in RTL) */}
-                            <div className="md:hidden flex items-center gap-3">
-                                {/* Quick Mobile Links (Services) */}
-                                <div className="flex items-center justify-between w-full max-w-[65vw] sm:max-w-xs pl-2 pr-1">
-                                    <Link href={route('services.caravans')} className={`text-[11px] sm:text-xs md:text-sm font-black transition-all px-2 py-1.5 rounded-md text-center flex-1 leading-tight ${route().current('services.caravans') ? 'text-white bg-[#dba61f] shadow-sm' : 'text-[#0B1F3A] dark:text-gray-300 hover:text-[#dba61f] bg-gray-100/50 dark:bg-white/5'}`}>
-                                        صيانة<br className="sm:hidden" /> كرفانات
-                                    </Link>
-                                    <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-1"></div>
-                                    <Link href={route('services.portacabins')} className={`text-[11px] sm:text-xs md:text-sm font-black transition-all px-2 py-1.5 rounded-md text-center flex-1 leading-tight ${route().current('services.portacabins') ? 'text-white bg-[#dba61f] shadow-sm' : 'text-[#0B1F3A] dark:text-gray-300 hover:text-[#dba61f] bg-gray-100/50 dark:bg-white/5'}`}>
-                                        صيانة<br className="sm:hidden" /> بركسات
-                                    </Link>
-                                    <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-1"></div>
-                                    <Link href={route('services.buildings')} className={`text-[11px] sm:text-xs md:text-sm font-black transition-all px-2 py-1.5 rounded-md text-center flex-1 leading-tight ${route().current('services.buildings') ? 'text-white bg-[#dba61f] shadow-sm' : 'text-[#0B1F3A] dark:text-gray-300 hover:text-[#dba61f] bg-gray-100/50 dark:bg-white/5'}`}>
-                                        صيانة<br className="sm:hidden" /> مباني
-                                    </Link>
-                                </div>
-                                <div className="toggle-switch scale-[0.65] origin-right mx-1" title={isDarkMode ? 'تفعيل الوضع الفاتح' : 'تفعيل الوضع الداكن'}>
-                                    <label className="switch-label">
-                                        <input type="checkbox" className="checkbox" checked={!isDarkMode} onChange={toggleDarkMode} />
-                                        <span className="slider"></span>
-                                    </label>
-                                </div>
-                                <button
-                                    onClick={() => setIsOpen(!isOpen)}
-                                    className="bg-white/80 dark:bg-[#0B1F3A] ring-1 ring-gray-200/50 dark:ring-white/10 backdrop-blur-md text-[#0B1F3A] dark:text-white focus:outline-none w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm active:scale-95"
-                                    aria-label="قائمة التنقل"
-                                >
-                                    <div className={`hamburger-button ${isOpen ? 'is-open text-[#dba61f]' : 'text-[#0B1F3A] dark:text-white'}`}>
-                                        <div className="h-line1"></div>
-                                        <div className="h-line2"></div>
-                                        <div className="h-line3"></div>
-                                    </div>
-                                </button>
-                            </div>
+            {/* --- هيدر الموبايل (ثابت في الأعلى) --- */}
+            <header className="fixed z-[60] top-0 left-0 right-0 bg-white/95 dark:bg-[#0B1F3A]/95 backdrop-blur-md border-b dark:border-white/10 md:hidden" dir="rtl">
+                {/* السطر الأول: اللوجو والزر */}
+                <div className="flex items-center justify-between px-4 h-16">
+                    <Link href={route('home')} className="flex items-center gap-2 shrink-0">
+                        <div className="w-9 h-9 bg-[#dba61f] rounded-lg flex items-center justify-center shadow-sm">
+                            <DynamicIcon name="rv_hookup" className="text-white text-xl" />
                         </div>
+                        <span className="font-black text-[14px] dark:text-white truncate max-w-[180px]">
+                            {siteName}
+                        </span>
+                    </Link>
+
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 dark:bg-white/10 text-gray-800 dark:text-white"
+                    >
+                        <DynamicIcon name={isOpen ? "close" : "menu"} className="text-2xl" />
+                    </button>
+                </div>
+
+                {/* السطر الثاني: روابط الوصول السريع (أفقية) */}
+                <div className="px-4 pb-3 overflow-x-auto no-scrollbar">
+                    <ul className="flex items-center gap-2 flex-nowrap">
+                        {mobilePriorityLinks.map((link, index) => (
+                            <NavLink key={index} link={link} variant="quick-bar" />
+                        ))}
+                    </ul>
+                </div>
+            </header>
+
+            {/* --- قائمة الموبايل الجانبية (Sidebar) --- */}
+            <div className={`fixed inset-0 z-[65] md:hidden transition-all duration-300 ${isOpen ? 'visible' : 'invisible'}`}>
+                <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0'}`} onClick={() => setIsOpen(false)}></div>
+                <nav className={`absolute top-0 right-0 h-full w-[280px] bg-white dark:bg-[#0B1F3A] shadow-2xl transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'} flex flex-col p-6`} dir="rtl">
+                    <div className="flex justify-between items-center mb-6 border-b pb-4 dark:border-white/10">
+                        <span className="font-bold dark:text-white">قائمة التصفح</span>
+                        <button onClick={() => setIsOpen(false)} className="dark:text-white text-2xl">✕</button>
                     </div>
 
-                    {/* Mobile Dropdown Menu */}
-                    <div className={`md:hidden absolute top-[110%] left-0 right-0 max-h-[75vh] overflow-y-auto bg-white/95 dark:bg-[#0B1F3A]/95 backdrop-blur-xl rounded-3xl border border-gray-100 dark:border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.12)] transition-all duration-300 ease-in-out origin-top ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'}`}>
-                        <div className="p-4 space-y-2 flex flex-col">
-                            {navLinks.map((link, index) => (
-                                <Link
-                                    key={index}
-                                    href={link.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className={`block px-5 py-3.5 rounded-2xl text-lg font-black transition-all ${link.active ? 'bg-[#dba61f]/10 text-[#dba61f] border-r-4 border-[#dba61f]' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#0B1F3A] dark:hover:text-white'}`}
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
+                    <ul className="flex flex-col gap-1 overflow-y-auto flex-1">
+                        {navLinks.map((link, index) => (
+                            <NavLink key={index} link={link} closeMenu={() => setIsOpen(false)} variant="mobile-sidebar" />
+                        ))}
+                    </ul>
 
-                            <div className="my-2 border-t border-gray-100 dark:border-white/5 pt-2"></div>
-
-
-
-                            <div className="mt-4 pt-2 px-1">
-                                <Link href={route('contact')} className="w-full flex justify-center items-center gap-2 bg-[#190f44] text-[#211c11] font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-transform">
-                                    <span>تواصل معنا </span>
-                                    <DynamicIcon name="arrow_forward" className="text-sm rotate-180" />
-                                </Link>
-                            </div>
-                        </div>
+                    <div className="mt-auto pt-4 space-y-3">
+                        <button onClick={toggleDarkMode} className="w-full py-3 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center gap-2 font-bold dark:text-white transition-colors">
+                            <DynamicIcon name={isDarkMode ? 'light_mode' : 'dark_mode'} />
+                            {isDarkMode ? 'الوضع الفاتح' : 'الوضع الداكن'}
+                        </button>
                     </div>
                 </nav>
             </div>
 
-            {/* Logo deleted from here as it was moved up */}
+            {/* --- نافبار الديسكتوب (لشاشات الكمبيوتر) --- */}
+            <div className="hidden md:flex fixed z-50 top-5 left-4 right-4 items-center gap-3" dir="rtl">
+                <Link href={route('home')} className="shrink-0 flex items-center justify-center bg-white/90 dark:bg-[#0B1F3A]/90 backdrop-blur-xl w-14 h-14 rounded-2xl shadow-lg border border-white/20 dark:border-white/10">
+                    <DynamicIcon name="rv_hookup" className="text-[#dba61f] text-3xl" />
+                </Link>
+
+                <nav className="flex-1 flex items-center justify-between bg-white/90 dark:bg-[#0B1F3A]/90 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 dark:border-white/10 px-4 h-16">
+                    <ul className="flex items-center gap-1 lg:gap-2">
+                        {navLinks.map((link, index) => (
+                            <NavLink key={index} link={link} variant="desktop" />
+                        ))}
+                    </ul>
+
+                    <div className="flex items-center gap-3 mr-2">
+                        <button onClick={toggleDarkMode} className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 transition-all">
+                            <DynamicIcon name={isDarkMode ? 'light_mode' : 'dark_mode'} className="text-xl" />
+                        </button>
+                        <Link href={route('contact')} className="bg-[#dba61f] hover:bg-[#c4951b] text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-md whitespace-nowrap text-sm">
+                            تواصل معنا
+                        </Link>
+                    </div>
+                </nav>
+            </div>
+
+            {/* مساحة فارغة علوية للموبايل لتعويض الهيدر الثابت */}
+            <div className="h-28 md:hidden"></div>
+
             <FloatingContact />
         </>
     );

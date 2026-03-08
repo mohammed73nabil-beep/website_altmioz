@@ -68,6 +68,13 @@ export default function AdminLayout({ header, children }) {
                         <span className="font-medium">سجل الأعمال</span>
                     </Link>
                     <Link
+                        href={route('admin.posts.index')}
+                        className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all group ${url?.startsWith('/admin/posts') ? 'active-nav' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
+                    >
+                        <span className="material-symbols-outlined">article</span>
+                        <span className="font-medium">المدونة</span>
+                    </Link>
+                    <Link
                         href={route('admin.project-requests.index')}
                         className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all group ${url?.startsWith('/admin/project-requests') ? 'active-nav' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
                     >

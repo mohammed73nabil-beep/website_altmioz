@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 export default function ProjectsIndex({ projects = [] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState(null);
+    const projectsArray = Array.isArray(projects) ? projects : (projects?.data || []);
+    const paginationLinks = Array.isArray(projects?.links) ? projects.links : null;
 
     // Form handling
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
@@ -120,8 +122,8 @@ export default function ProjectsIndex({ projects = [] }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                            {projects.length > 0 ? (
-                                projects.map((project) => (
+                            {projectsArray.length > 0 ? (
+                                projectsArray.map((project) => (
                                     <tr key={project.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
                                             {project.image_path ? (
@@ -180,6 +182,23 @@ export default function ProjectsIndex({ projects = [] }) {
                 </div>
             </div>
 
+            {paginationLinks && paginationLinks.length > 0 && (
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+                    {paginationLinks.map((link, idx) => (
+                        <a
+                            key={`${idx}-${link.label}`}
+                            href={link.url || '#'}
+                            className={`px-4 py-2 rounded-lg border text-sm font-bold transition-colors ${
+                                link.active
+                                    ? 'bg-primary text-sidebar-dark border-primary'
+                                    : 'bg-white dark:bg-[#1a1a1a] text-slate-700 dark:text-slate-200 border-slate-200 dark:border-white/10 hover:border-primary/40'
+                            } ${!link.url ? 'opacity-50 pointer-events-none' : ''}`}
+                            dangerouslySetInnerHTML={{ __html: link.label }}
+                        />
+                    ))}
+                </div>
+            )}
+
             {/* Add Project Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -208,20 +227,20 @@ export default function ProjectsIndex({ projects = [] }) {
                                             value={data.title_ar}
                                             onChange={e => setData('title_ar', e.target.value)}
                                             className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-sm transition-all dark:text-white"
-                                            placeholder="مثال: كرفان سياحي VIP"
+                                            placeholder="مثال: حديقة فيلا خاصة"
                                         />
                                         {errors.title_ar && <span className="text-red-500 text-xs mt-1">{errors.title_ar}</span>}
                                     </div>
 
                                     {/* Caravan Type */}
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">نوع الكرفان <span className="text-red-500">*</span></label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">نوع اللاندسكيب / الحديقة <span className="text-red-500">*</span></label>
                                         <input
                                             type="text"
                                             value={data.category}
                                             onChange={e => setData('category', e.target.value)}
                                             className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-sm transition-all dark:text-white"
-                                            placeholder="مثال: سحب، سيارة، تجاري..."
+                                            placeholder="مثال: تصميم حدائق، شلالات، عشب صناعي..."
                                         />
                                         {errors.category && <span className="text-red-500 text-xs mt-1">{errors.category}</span>}
                                     </div>
@@ -250,9 +269,9 @@ export default function ProjectsIndex({ projects = [] }) {
                                             type="file"
                                             accept="image/*"
                                             onChange={e => setData('image_before', e.target.files[0])}
-                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#dba61f]/10 file:text-[#dba61f] hover:file:bg-[#dba61f]/20 cursor-pointer"
+                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
                                         />
-                                        <p className="text-[10px] text-slate-500 mt-1">اختياري: يعرض للعملاء كيفية تطوير الكرفان. {editingProject && "دعه فارغاً للإبقاء على الصورة الحالية"}</p>
+                                        <p className="text-[10px] text-slate-500 mt-1">اختياري: يعرض للعملاء كيفية تطوير الحديقة. {editingProject && "دعه فارغاً للإبقاء على الصورة الحالية"}</p>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">صورة (بعد) {!editingProject && <span className="text-red-500">*</span>}</label>
@@ -260,7 +279,7 @@ export default function ProjectsIndex({ projects = [] }) {
                                             type="file"
                                             accept="image/*"
                                             onChange={e => setData('image_after', e.target.files[0])}
-                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#dba61f]/10 file:text-[#dba61f] hover:file:bg-[#dba61f]/20 cursor-pointer"
+                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
                                         />
                                         <p className="text-[10px] text-slate-500 mt-1">الصورة النهائية للمشروع والتي ستكون البانر. {editingProject && "دعه فارغاً للإبقاء على الصورة الحالية"}</p>
                                     </div>

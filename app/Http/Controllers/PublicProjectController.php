@@ -16,7 +16,7 @@ class PublicProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $projects = Project::latest()->get();
+        $projects = Project::latest()->paginate(12)->withQueryString();
 
         return Inertia::render('Public/Projects/Index', [
             'projects' => $projects,

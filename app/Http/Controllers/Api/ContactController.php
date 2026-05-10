@@ -18,7 +18,7 @@ class ContactController extends Controller
         $message = ContactMessage::create($request->validated());
 
         // Notify admin (using a configuration email or default)
-        $adminEmail = env('MAIL_FROM_ADDRESS', 'admin@example.com');
+        $adminEmail = config('site.admin_email', 'admin@example.com');
         Notification::route('mail', $adminEmail)->notify(new NewContactMessage($message));
 
         if ($request->wantsJson()) {

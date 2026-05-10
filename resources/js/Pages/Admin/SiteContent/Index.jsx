@@ -59,17 +59,76 @@ export default function SiteContentIndex({ contents = [] }) {
         }
     };
 
+    // Predefined recommended keys for the site
+    const predefinedKeys = {
+        // Home
+        'home.hero.title': 'العنوان الرئيسي (الرئيسية)',
+        'home.hero.subtitle': 'النص الفرعي (الرئيسية)',
+        'home.hero.image': 'صورة الغلاف (الرئيسية) [نوع: صورة]',
+        'home.hero.primary_button_text': 'زر الغلاف الرئيسي (الرئيسية)',
+        'home.hero.secondary_button_text': 'زر الغلاف الثانوي (الرئيسية)',
+        'home.hero.stats.projects.number': 'عدد المشاريع (الرئيسية)',
+        'home.hero.stats.experience.number': 'سنوات الخبرة (الرئيسية)',
+        'home.hero.stats.satisfaction.number': 'نسبة الرضا (الرئيسية)',
+        
+        'home.services.badge': 'شارة قسم الخدمات (الرئيسية)',
+        'home.services.title': 'عنوان قسم الخدمات (الرئيسية)',
+        'home.services.maintenance.title': 'الخدمة 1 - العنوان',
+        'home.services.maintenance.description': 'الخدمة 1 - الوصف',
+        'home.services.caravans.title': 'الخدمة 2 - العنوان',
+        'home.services.caravans.description': 'الخدمة 2 - الوصف',
+        'home.services.portacabins.title': 'الخدمة 3 - العنوان',
+        'home.services.portacabins.description': 'الخدمة 3 - الوصف',
+        'home.services.renovation.title': 'الخدمة 4 - العنوان',
+        'home.services.renovation.description': 'الخدمة 4 - الوصف',
+        'home.services.insulation.title': 'الخدمة 5 - العنوان',
+        'home.services.insulation.description': 'الخدمة 5 - الوصف',
+        'home.services.electrical.title': 'الخدمة 6 - العنوان',
+        'home.services.electrical.description': 'الخدمة 6 - الوصف',
+
+        'home.why.title': 'عنوان لماذا تختارنا (الرئيسية)',
+        'home.why.description': 'نبذة لماذا تختارنا (الرئيسية)',
+        'home.why.features.support.title': 'ميزة الدعم - العنوان',
+        'home.why.features.support.text': 'ميزة الدعم - الوصف',
+        'home.why.features.team.title': 'ميزة الطاقم - العنوان',
+        'home.why.features.team.text': 'ميزة الطاقم - الوصف',
+        'home.why.features.warranty.title': 'ميزة الضمان - العنوان',
+        'home.why.features.warranty.text': 'ميزة الضمان - الوصف',
+        'home.why.features.quality.title': 'ميزة الجودة - العنوان',
+        'home.why.features.quality.text': 'ميزة الجودة - الوصف',
+
+        'home.projects.badge': 'شارة المشاريع (الرئيسية)',
+        'home.projects.title': 'عنوان المشاريع (الرئيسية)',
+        'home.testimonials.badge': 'شارة آراء العملاء (الرئيسية)',
+        'home.testimonials.title': 'عنوان آراء العملاء (الرئيسية)',
+        'home.cta.title': 'العنوان دعوة للحركة (الرئيسية)',
+        'home.cta.description': 'الوصف دعوة للحركة (الرئيسية)',
+
+        // About
+        'about.hero.title': 'العنوان الرئيسي (من نحن)',
+        'about.hero.subtitle': 'النص الفرعي (من نحن)',
+        'about.hero.image': 'صورة الغلاف (من نحن) [نوع: صورة]',
+        'about.company.badge': 'شارة الشركة (من نحن)',
+        'about.company.title': 'عنوان الشركة (من نحن)',
+        'about.company.paragraph_1': 'مقدمة الشركة (من نحن)',
+        'about.company.paragraph_2': 'تفاصيل الشركة (من نحن)',
+        'about.vision.title': 'الرؤية - العنوان',
+        'about.vision.text': 'الرؤية - النص',
+        'about.mission.title': 'الرسالة - العنوان',
+        'about.mission.text': 'الرسالة - النص',
+        'about.team.member1.name': 'عضو الفريق 1 - الاسم',
+        'about.team.member1.position': 'عضو الفريق 1 - المنصب',
+        'about.team.member1.image': 'عضو الفريق 1 - الصورة [نوع: صورة]',
+
+        // Contact
+        'contact.header.title': 'العنوان الرئيسي (تواصل معنا)',
+        'contact.header.subtitle': 'النص الفرعي (تواصل معنا)',
+        'contact.header.image': 'صورة الغلاف (تواصل معنا) [نوع: صورة]',
+    };
+
     // Helper to get descriptive titles for certain keys
     const getKeyTitle = (key) => {
-        const titles = {
-            'hero_title': 'العنوان الرئيسي (Hero Title)',
-            'hero_subtitle': 'العنوان الفرعي (Hero Subtitle)',
-            'hero_background': 'صورة الغلاف الرئيسية (Hero Image)',
-            'about_us': 'نص من نحن (About Us)',
-            'phone_number': 'رقم الهاتف للتواصل',
-            'email_address': 'البريد الإلكتروني'
-        };
-        return titles[key] || key;
+        return predefinedKeys[key] || key;
     };
 
     return (
@@ -109,13 +168,20 @@ export default function SiteContentIndex({ contents = [] }) {
                                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">المفتاح (الرابط البرمجي)</label>
                                 <input
                                     type="text"
+                                    list="predefined-keys"
                                     value={data.key}
                                     onChange={e => setData('key', e.target.value)}
                                     disabled={editingKey !== null}
                                     className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-sm transition-all dark:text-white disabled:opacity-50"
-                                    placeholder="مثال: hero_title"
+                                    placeholder="اختر من القائمة أو اكتب مفتاحاً جديداً..."
                                     dir="ltr"
+                                    autoComplete="off"
                                 />
+                                <datalist id="predefined-keys">
+                                    {Object.entries(predefinedKeys).map(([key, label]) => (
+                                        <option key={key} value={key}>{label}</option>
+                                    ))}
+                                </datalist>
                                 {errors.key && <div className="text-red-500 text-xs mt-1">{errors.key}</div>}
                             </div>
 

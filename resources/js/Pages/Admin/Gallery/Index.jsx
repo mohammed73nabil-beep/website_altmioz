@@ -50,10 +50,10 @@ const convertToWebP = (file) =>
 // ─── Page card labels ─────────────────────────────────────────────────────────
 const PAGE_ICONS = {
     home: 'home',
-    services: 'handyman',
-    caravans: 'rv_hookup',
-    portacabins: 'domain',
-    buildings: 'apartment',
+    landscaping: 'yard',
+    artificial_grass: 'grass',
+    water_features: 'pool',
+    pergolas: 'deck',
 };
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -180,9 +180,15 @@ export default function GalleryIndex({ pages = {}, selectedPage, images = [] }) 
                 <div>
                     <div className="flex justify-between items-center bg-white dark:bg-sidebar-dark p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 relative overflow-hidden mb-8">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16" />
-                        <div className="relative z-10">
-                            <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-2">صور الأعمال</h2>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">اختر الصفحة التي تريد إدارة صور أعمالها.</p>
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between w-full gap-4">
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-2">صور الأعمال</h2>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">اختر الصفحة التي تريد إدارة صور أعمالها.</p>
+                            </div>
+                            <a href={route('admin.before-after.index')} className="bg-[#22C55E] text-[#0a0a0a] hover:bg-[#22C55E]/90 font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2 w-fit">
+                                <span className="material-symbols-outlined text-[20px]">compare</span>
+                                إدارة صور قبل وبعد
+                            </a>
                         </div>
                     </div>
 
@@ -270,7 +276,7 @@ export default function GalleryIndex({ pages = {}, selectedPage, images = [] }) 
                                     type="text"
                                     value={addForm.data.title}
                                     onChange={e => addForm.setData('title', e.target.value)}
-                                    placeholder="مثال: صيانة كرفان ميداني - الرياض"
+                                    placeholder="مثال: حديقة فيلا خاصة - الرياض"
                                     className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                                 />
                             </div>

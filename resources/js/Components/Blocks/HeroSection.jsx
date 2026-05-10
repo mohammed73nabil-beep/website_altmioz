@@ -10,15 +10,15 @@ export default function HeroSection({ data }) {
                     className="w-full h-full object-cover transform scale-105 animate-[pulse_30s_infinite_alternate]"
                     src={data?.image ? data.image : "/images/hero-bg-2.jpg"}
                 />
-                <div className="absolute inset-0 bg-[#0B1F3A]/60 mix-blend-multiply"></div>
+                <div className="absolute inset-0 bg-[#064E3B]/60 mix-blend-multiply"></div>
                 {/* Fallback pattern if no image */}
                 {!data?.image && <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')] opacity-30"></div>}
             </div>
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 mt-20">
                 <div className="max-w-4xl text-right">
-                    <span className="inline-block py-1.5 px-4 rounded-full border border-[#C9A227]/40 text-[#C9A227] font-bold text-sm tracking-widest uppercase mb-6 backdrop-blur shadow-sm">
-                        صيانة وفخامة المقاولات
+                    <span className="inline-block py-1.5 px-4 rounded-full border border-[#16A34A]/40 text-[#16A34A] font-bold text-sm tracking-widest uppercase mb-6 backdrop-blur shadow-sm">
+                        حديقتي لاندسكيب
                     </span>
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[1.1] drop-shadow-2xl">
                         {data?.title?.ar || 'عنوان الصفحة الرئيسي'}
@@ -28,10 +28,10 @@ export default function HeroSection({ data }) {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 mb-16">
-                        <Link href={route('contact')} className="bg-gradient-to-r from-[#C9A227] to-[#e3c059] hover:brightness-110 text-[#0B1F3A] font-bold py-4 px-10 rounded-lg transition-all shadow-[0_10px_30px_rgba(201,162,39,0.3)] hover:-translate-y-1 text-lg text-center">
+                        <Link href={route('contact')} className="bg-gradient-to-r from-[#16A34A] to-[#4ADE80] hover:brightness-110 text-[#064E3B] font-bold py-4 px-10 rounded-lg transition-all shadow-[0_10px_30px_rgba(201,162,39,0.3)] hover:-translate-y-1 text-lg text-center">
                             تواصل معنا
                         </Link>
-                        <Link href={route('our-projects.index')} className="border border-white/30 hover:bg-white hover:text-[#0B1F3A] text-white font-bold py-4 px-10 rounded-lg transition-all backdrop-blur-sm hover:-translate-y-1 text-lg text-center">
+                        <Link href={route('our-projects.index')} className="border border-white/30 hover:bg-white hover:text-[#064E3B] text-white font-bold py-4 px-10 rounded-lg transition-all backdrop-blur-sm hover:-translate-y-1 text-lg text-center">
                             سجل أعمالنا
                         </Link>
                     </div>

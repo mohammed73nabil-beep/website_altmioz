@@ -7,6 +7,7 @@ export default function AdminLayout({ header, children }) {
     const user = props.auth?.user || { name: 'المدير', email: 'admin@admin.com' };
 
     const [isDarkMode, setIsDarkMode] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const savedMode = localStorage.getItem('adminDarkMode');
@@ -14,6 +15,11 @@ export default function AdminLayout({ header, children }) {
             setIsDarkMode(savedMode === 'true');
         }
     }, []);
+
+    // إغلاق القائمة عند الانتقال لصفحة أخرى
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [url]);
 
     const toggleTheme = () => {
         const newMode = !isDarkMode;
@@ -30,22 +36,35 @@ export default function AdminLayout({ header, children }) {
                 <style>{`
                     body { font-family: 'IBM Plex Sans Arabic', 'Manrope', sans-serif; }
                     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-                    .active-nav { background-color: rgba(219, 166, 31, 0.15); border-right: 4px solid #dba61f; color: #dba61f; }
+                    .active-nav { background-color: rgba(219, 166, 31, 0.15); border-right: 4px solid #22C55E; color: #22C55E; }
                     ::-webkit-scrollbar { width: 6px; }
-                    ::-webkit-scrollbar-track { background: #0a0a0a; }
+                    ::-webkit-scrollbar-track { background: transparent; }
                     ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+                    
+                    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(219, 166, 31, 0.2); border-radius: 10px; }
+                    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); }
                 `}</style>
             </Head>
 
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                ></div>
+            )}
+
             {/* Right Sidebar Navigation */}
-            <aside className="w-72 bg-sidebar-dark border-l border-white/5 flex flex-col h-screen sticky top-0 shrink-0">
+            <aside className={`w-72 bg-sidebar-dark border-l border-white/5 flex flex-col h-screen fixed md:sticky top-0 right-0 z-50 shrink-0 transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}`}>
                 <div className="p-8 flex items-center gap-3">
                     <div>
                         <h1 className="text-white text-lg font-bold leading-none">نظام الإدارة</h1>
-                        <p className="text-primary text-[10px] uppercase tracking-widest mt-1 font-semibold">Luxury Caravans</p>
+                        <p className="text-primary text-[10px] uppercase tracking-widest mt-1 font-semibold">Hadiqati Landscape</p>
                     </div>
                 </div>
-                <nav className="flex-1 px-4 py-4 space-y-2">
+                <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
                     <Link
                         href={route('admin.dashboard')}
                         className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all group ${url?.startsWith('/admin/dashboard') ? 'active-nav' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
@@ -128,8 +147,14 @@ export default function AdminLayout({ header, children }) {
             {/* Main Content Area */}
             <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-background-light dark:bg-background-dark min-w-0">
                 {/* Top Header */}
-                <header className="h-20 border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-8 bg-white dark:bg-sidebar-dark/50 backdrop-blur-md sticky top-0 z-10 shrink-0">
+                <header className="h-20 border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-4 md:px-8 bg-white dark:bg-sidebar-dark/50 backdrop-blur-md sticky top-0 z-10 shrink-0">
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="md:hidden text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center justify-center w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
+                        >
+                            <span className="material-symbols-outlined">menu</span>
+                        </button>
                         <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                             {header}
                         </div>
@@ -169,7 +194,7 @@ export default function AdminLayout({ header, children }) {
 
                 {/* Footer Meta */}
                 <footer className="flex items-center justify-between px-8 pt-8 pb-4 text-[11px] text-slate-500 font-medium mt-auto shrink-0">
-                    <p>نظام صيانة الكرفانات والبركسات © {new Date().getFullYear()} — صُمِّم بواسطة <a href="https://wa.me/967781582995" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">شركة Aboras Soft</a></p>
+                    <p>نظام حديقتي لاندسكيب © {new Date().getFullYear()} — صُمِّم بواسطة <a href="https://wa.me/967781582995" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">شركة Aboras Soft</a></p>
                     <div className="flex items-center gap-4">
                         <a className="hover:text-primary transition-colors" href="#">دعم الفني</a>
                     </div>

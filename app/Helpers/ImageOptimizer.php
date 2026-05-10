@@ -22,18 +22,18 @@ class ImageOptimizer
      *
      * @param  UploadedFile  $file        The uploaded file from the request.
      * @param  string        $directory   Storage directory inside public disk (e.g. 'gallery').
-     * @param  int           $maxWidth    Maximum width in pixels (default 1920).
-     * @param  int           $maxHeight   Maximum height in pixels (default 1080).
-     * @param  int           $quality     WebP quality 1-100 (default 82).
+     * @param  int           $maxWidth    Maximum width in pixels (default 1280).
+     * @param  int           $maxHeight   Maximum height in pixels (default 720).
+     * @param  int           $quality     WebP quality 1-100 (default 65).
      * @param  string|null   $oldPath     Optional old file path to delete before saving.
      * @return string  Relative path stored in public disk.
      */
     public static function storeAsWebP(
         UploadedFile $file,
         string $directory,
-        int $maxWidth  = 1920,
-        int $maxHeight = 1080,
-        int $quality   = 82,
+        int $maxWidth  = 1280,
+        int $maxHeight = 720,
+        int $quality   = 65,
         ?string $oldPath = null
     ): string {
         // Delete previous file if supplied
@@ -73,6 +73,6 @@ class ImageOptimizer
         UploadedFile $file,
         ?string $oldPath = null
     ): string {
-        return self::storeAsWebP($file, 'avatars', 800, 800, 85, $oldPath);
+        return self::storeAsWebP($file, 'avatars', 720, 720, 65, $oldPath);
     }
 }

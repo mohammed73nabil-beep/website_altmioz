@@ -152,7 +152,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                     {/* Profile Card */}
                     <div className="bg-white dark:bg-sidebar-dark rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm overflow-hidden">
                         {/* Cover gradient */}
-                        <div className="h-28 bg-gradient-to-br from-[#0B1F3A] via-[#1a3a5c] to-[#0B1F3A] relative overflow-hidden">
+                        <div className="h-28 bg-gradient-to-br from-[#064E3B] via-[#1a3a5c] to-[#064E3B] relative overflow-hidden">
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(201,162,39,0.3),_transparent_60%)]"></div>
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')] opacity-20"></div>
                         </div>
@@ -162,7 +162,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                             <div className="-mt-12 flex flex-col items-center px-6 pb-4">
                                 {/* Avatar circle - click to pick */}
                                 <div className="relative group cursor-pointer" onClick={() => avatarInputRef.current?.click()}>
-                                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white dark:border-sidebar-dark shadow-xl bg-gradient-to-br from-[#C9A227] to-[#e3c059] flex items-center justify-center text-[#0B1F3A] font-black text-3xl">
+                                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white dark:border-sidebar-dark shadow-xl bg-gradient-to-br from-[#16A34A] to-[#4ADE80] flex items-center justify-center text-[#064E3B] font-black text-3xl">
                                         {avatarSrc ? (
                                             <img src={avatarSrc} alt="avatar" className="w-full h-full object-cover" />
                                         ) : (

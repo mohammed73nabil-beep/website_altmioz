@@ -29,7 +29,6 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        \Illuminate\Support\Facades\Log::info('Settings Update Request:', $request->all());
         try {
             $data = $request->validate([
                 'settings' => 'required|array',
@@ -61,12 +60,9 @@ class SettingController extends Controller
             }
 
             $setting->save();
-            
-            // Clear the specific cache for this setting
-            Cache::forget('setting_' . $setting->key);
         }
 
-        \Illuminate\Support\Facades\Log::info("Settings updated successfully!");
+        Cache::forget('global_settings');
         return redirect()->back()->with('message', 'Settings updated successfully.');
     }
 }

@@ -18,7 +18,7 @@ class ProjectController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Projects/Index', [
-            'projects' => Project::latest()->get(),
+            'projects' => Project::latest()->paginate(20)->withQueryString(),
         ]);
     }
 

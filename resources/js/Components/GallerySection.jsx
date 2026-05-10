@@ -40,10 +40,10 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                 <div className="max-w-7xl mx-auto px-4">
                     {/* Heading */}
                     <div className="text-center mb-14">
-                        <span className="inline-block text-[#C9A227] font-bold tracking-widest text-xs uppercase mb-3">معرض أعمالنا</span>
+                        <span className="inline-block text-[#16A34A] font-bold tracking-widest text-xs uppercase mb-3">معرض أعمالنا</span>
                         <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-3">{title}</h2>
                         {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
-                        <div className="w-20 h-1 bg-gradient-to-r from-[#e3c059] to-[#C9A227] mx-auto mt-5 rounded-full"></div>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#4ADE80] to-[#16A34A] mx-auto mt-5 rounded-full"></div>
                     </div>
 
                     {/* Grid — 2 cols on mobile, 3 on md, 4 on xl */}
@@ -52,7 +52,7 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                             <button
                                 key={img.id}
                                 onClick={() => setLightboxIndex(idx)}
-                                className="group relative rounded-2xl overflow-hidden shadow-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] bg-black"
+                                className="group relative rounded-2xl overflow-hidden shadow-lg focus:outline-none focus:ring-2 focus:ring-[#16A34A] bg-black"
                                 style={{ aspectRatio: '4/3' }}
                             >
                                 {/* Image */}
@@ -80,7 +80,7 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                                 </div>
 
                                 {/* Gold corner accent */}
-                                <div className="absolute top-0 left-0 w-0 group-hover:w-1 h-full bg-[#C9A227] transition-all duration-300"></div>
+                                <div className="absolute top-0 left-0 w-0 group-hover:w-1 h-full bg-[#16A34A] transition-all duration-300"></div>
                             </button>
                         ))}
                     </div>

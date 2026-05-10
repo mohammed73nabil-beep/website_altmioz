@@ -119,7 +119,7 @@ export default function PostCreate({ categories = [] }) {
                                 type="file"
                                 accept="image/*"
                                 onChange={e => setData('image', e.target.files[0])}
-                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#dba61f]/10 file:text-[#dba61f] hover:file:bg-[#dba61f]/20 cursor-pointer"
+                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
                             />
                             {errors.image && <span className="text-red-500 text-xs mt-1">{errors.image}</span>}
                         </div>
@@ -169,7 +169,7 @@ export default function PostCreate({ categories = [] }) {
                                     onChange={e => setData('is_published', e.target.checked)}
                                     className="sr-only peer"
                                 />
-                                <div className="relative w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+                                <div className="relative w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-white/20 peer-checked:bg-primary"></div>
                                 <span className="ml-3 text-sm font-medium text-slate-900 dark:text-slate-300 mr-3">نشر المقال فوراً</span>
                             </label>
                         </div>

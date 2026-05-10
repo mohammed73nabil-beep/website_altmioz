@@ -29,6 +29,7 @@ class Content extends Model
     {
         $clearCache = function () {
             Cache::forget('published_page_contents');
+            Cache::forget('admin_contents_index');
         };
 
         static::created($clearCache);

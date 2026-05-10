@@ -13,11 +13,11 @@ class GalleryController extends Controller
 {
     // Pages available for gallery management
     private const PAGES = [
-        'home'         => 'الصفحة الرئيسية',
-        'services'     => 'صفحة الخدمات',
-        'caravans'     => 'صيانة الكرفانات',
-        'portacabins'  => 'صيانة البركسات',
-        'buildings'    => 'صيانة المباني',
+        'home'             => 'الصفحة الرئيسية',
+        'landscaping'      => 'تنسيق الحدائق',
+        'artificial_grass' => 'العشب الصناعي',
+        'water_features'   => 'نوافير وشلالات',
+        'pergolas'         => 'مظلات وجلسات',
     ];
 
     /**
@@ -53,7 +53,13 @@ class GalleryController extends Controller
             'title'      => ['nullable', 'string', 'max:255'],
         ]);
 
-        // Convert to WebP and store (max 1920×1080, quality 82)
+        // Check the 20 images limit per page
+        $imageCount = GalleryImage::where('page', $request->page)->count();
+        if ($imageCount >= 20) {
+            return back()->withErrors(['image' => 'عذراً، لا يمكن إضافة أكثر من 20 صورة لهذا القسم. الرجاء حذف بعض الصور القديمة أولاً.']);
+        }
+
+        // Convert to WebP and store (max 1280×720, quality 65)
         $path = ImageOptimizer::storeAsWebP($request->file('image'), 'gallery');
 
         GalleryImage::create([
@@ -81,7 +87,7 @@ class GalleryController extends Controller
             $gallery->image_path = ImageOptimizer::storeAsWebP(
                 $request->file('image'),
                 'gallery',
-                1920, 1080, 82,
+                1280, 720, 65,
                 $gallery->image_path  // old path — deleted inside helper
             );
         }

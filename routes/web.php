@@ -13,7 +13,10 @@ use App\Http\Controllers\Admin\SiteContentController;
 use App\Http\Controllers\PublicProjectController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\SitemapController;
 
+// ——— Sitemap XML ———
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/', function () {
     // Fix #14: cache the unbounded SiteContent::all() and homepage data
@@ -27,14 +30,19 @@ Route::get('/', function () {
         return \App\Models\GalleryImage::where('page', 'home')->orderBy('order')->get();
     });
 
+    $beforeAfterImages = Cache::remember('home_before_after_images', 600, function () {
+        return \App\Models\BeforeAfterImage::orderBy('order')->get();
+    });
+
     return Inertia::render('Welcome', [
-        'canLogin'       => Route::has('login'),
-        'canRegister'    => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion'     => PHP_VERSION,
-        'siteContents'   => $contents,
-        'projects'       => $projects,
-        'galleryImages'  => $galleryImages,
+        'canLogin'          => Route::has('login'),
+        'canRegister'       => Route::has('register'),
+        'laravelVersion'    => Application::VERSION,
+        'phpVersion'        => PHP_VERSION,
+        'siteContents'      => $contents,
+        'projects'          => $projects,
+        'galleryImages'     => $galleryImages,
+        'beforeAfterImages' => $beforeAfterImages,
     ]);
 })->name('home');
 
@@ -54,60 +62,60 @@ Route::get('/services', function () {
     ]);
 })->name('services.index');
 
-Route::get('/services/caravans', function () {
+Route::get('/services/landscaping', function () {
     // Fix #5: cache contents + gallery per page with 10-min TTL
-    $contents = Cache::remember('page_contents_caravans', 600, function () {
-        return \App\Models\Content::where('page', 'صيانة الكرفانات')->get();
+    $contents = Cache::remember('page_contents_landscaping', 600, function () {
+        return \App\Models\Content::where('page', 'تنسيق الحدائق')->get();
     });
-    return Inertia::render('Public/Services/Caravans', [
-        'projects'          => Cache::remember('projects_caravans', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%كرفان%')
-                ->orWhere('title', 'like', '%كرفان%')
+    return Inertia::render('Public/Services/Landscaping', [
+        'projects'          => Cache::remember('projects_landscaping', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%حدائق%')
+                ->orWhere('title', 'like', '%حدائق%')
                 ->latest()->take(4)->get()
         ),
         'pageContents'      => $contents->pluck('value', 'key'),
         'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_caravans', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'caravans')->orderBy('order')->get()
+        'galleryImages'     => Cache::remember('gallery_page_landscaping', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'landscaping')->orderBy('order')->get()
         ),
     ]);
-})->name('services.caravans');
+})->name('services.landscaping');
 
-Route::get('/services/portacabins', function () {
-    $contents = Cache::remember('page_contents_portacabins', 600, function () {
-        return \App\Models\Content::where('page', 'صيانة البركسات')->get();
+Route::get('/services/design', function () {
+    $contents = Cache::remember('page_contents_design', 600, function () {
+        return \App\Models\Content::where('page', 'تصميم الحدائق')->get();
     });
-    return Inertia::render('Public/Services/Portacabins', [
-        'projects'          => Cache::remember('projects_portacabins', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%بركس%')
-                ->orWhere('title', 'like', '%بركس%')
+    return Inertia::render('Public/Services/Design', [
+        'projects'          => Cache::remember('projects_design', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%تصميم%')
+                ->orWhere('title', 'like', '%تصميم%')
                 ->latest()->take(4)->get()
         ),
         'pageContents'      => $contents->pluck('value', 'key'),
         'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_portacabins', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'portacabins')->orderBy('order')->get()
+        'galleryImages'     => Cache::remember('gallery_page_design', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'design')->orderBy('order')->get()
         ),
     ]);
-})->name('services.portacabins');
+})->name('services.design');
 
-Route::get('/services/buildings', function () {
-    $contents = Cache::remember('page_contents_buildings', 600, function () {
-        return \App\Models\Content::where('page', 'صيانة المباني')->get();
+Route::get('/services/artificial-grass', function () {
+    $contents = Cache::remember('page_contents_artificial_grass', 600, function () {
+        return \App\Models\Content::where('page', 'العشب الصناعي')->get();
     });
-    return Inertia::render('Public/Services/Buildings', [
-        'projects'          => Cache::remember('projects_buildings', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%مبان%')
-                ->orWhere('title', 'like', '%مبان%')
+    return Inertia::render('Public/Services/ArtificialGrass', [
+        'projects'          => Cache::remember('projects_artificial_grass', 600, fn () =>
+            \App\Models\Project::where('category', 'like', '%عشب%')
+                ->orWhere('title', 'like', '%عشب%')
                 ->latest()->take(4)->get()
         ),
         'pageContents'      => $contents->pluck('value', 'key'),
         'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_buildings', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'buildings')->orderBy('order')->get()
+        'galleryImages'     => Cache::remember('gallery_page_artificial_grass', 600, fn () =>
+            \App\Models\GalleryImage::where('page', 'artificial_grass')->orderBy('order')->get()
         ),
     ]);
-})->name('services.buildings');
+})->name('services.artificial-grass');
 Route::get('/about-us', function () {
     return Inertia::render('Public/About/Index');
 })->name('about');
@@ -118,7 +126,7 @@ Route::get('/our-projects/{project}', [PublicProjectController::class, 'show'])-
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.show');
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Content Manager (CMS V3)
@@ -143,6 +151,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'update'])->name('gallery.update');
     Route::delete('/gallery/{gallery}', [\App\Http\Controllers\Admin\GalleryController::class, 'destroy'])->name('gallery.destroy');
 
+    // Before/After Gallery
+    Route::get('/before-after', [\App\Http\Controllers\Admin\BeforeAfterController::class, 'index'])->name('before-after.index');
+    Route::post('/before-after', [\App\Http\Controllers\Admin\BeforeAfterController::class, 'store'])->name('before-after.store');
+    Route::post('/before-after/{beforeAfter}', [\App\Http\Controllers\Admin\BeforeAfterController::class, 'update'])->name('before-after.update');
+    Route::delete('/before-after/{beforeAfter}', [\App\Http\Controllers\Admin\BeforeAfterController::class, 'destroy'])->name('before-after.destroy');
+
     // Portfolio Projects (CMS)
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
@@ -162,15 +176,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/content', [SiteContentController::class, 'index'])->name('content.index');
     Route::post('/content', [SiteContentController::class, 'store'])->name('content.store');
     Route::delete('/content/{siteContent}', [SiteContentController::class, 'destroy'])->name('content.destroy');
-
-    Route::get('/content', [SiteContentController::class, 'index'])->name('content.index');
-    Route::post('/content', [SiteContentController::class, 'store'])->name('content.store');
-    Route::delete('/content/{siteContent}', [SiteContentController::class, 'destroy'])->name('content.destroy');
 });
 
 Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

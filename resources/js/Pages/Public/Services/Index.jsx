@@ -1,64 +1,60 @@
 import React, { useEffect } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import Navbar from '@/Components/Navbar';
 import DynamicIcon from '@/Components/DynamicIcon';
-import GallerySection from '@/Components/GallerySection';
+import SeoHead from '@/Components/SeoHead';
+import Footer from '@/Components/Footer';
 
 export default function ServicesIndex({ projects = [], galleryImages = [] }) {
     const { globalSettings, pageContents } = usePage().props;
-    const siteName = globalSettings?.site_name?.value || 'صيانة وفخامة الكرفانات والبركسات';
+    const siteName = globalSettings?.site_name?.value || 'حديقتي لاندسكيب';
 
-    // Smooth reveal animation on scroll
+    // Smooth reveal animation on scroll optimized with unobserve
     useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('opacity-100', 'translate-y-0');
                     entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    obs.unobserve(entry.target); // Stop observing once revealed for better performance
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
         return () => observer.disconnect();
     }, []);
 
     const serviceKeys = [
-        'maintenance',
-        'caravans',
-        'portacabins',
-        'renovation',
-        'insulation',
-        'electrical'
+        { key: 'maintenance', title: 'تنسيق الحدائق', desc: 'تصاميم خارجية مذهلة وتحويل المساحات إلى واحات خضراء تعكس ذوقك.', icon: 'yard' },
+        { key: 'caravans', title: 'تصميم 3D', desc: 'رؤية حديقتك قبل التنفيذ باستخدام أحدث برامج التصميم ثلاثي الأبعاد.', icon: 'design_services' },
+        { key: 'portacabins', title: 'العشب الصناعي', desc: 'أفضل أنواع العشب المعتمد عالمياً، مقاوم للحرارة ومثالي لبيئتنا.', icon: 'grass' },
+        { key: 'renovation', title: 'نوافير وشلالات', desc: 'إضافة لمسة مائية ساحرة تمنح حديقتك لمسة من الهدوء والأناقة.', icon: 'pool' },
+        { key: 'insulation', title: 'مظلات وجلسات', desc: 'تصميم وتنفيذ مساحات مريحة للعائلة بأفضل الخامات وأحدث التصاميم.', icon: 'deck' },
+        { key: 'electrical', title: 'شبكات الري', desc: 'أنظمة ري ذكية ومخفية تحافظ على جمال حديقتك بكفاءة عالية.', icon: 'water_drop' }
     ];
-
     const strengthKeys = [
-        'experience',
-        'team',
-        'speed',
-        'quality',
-        'warranty',
-        'support'
+        { key: 'experience', title: 'خبرة طويلة', desc: 'سنوات من التميز في مجال تنسيق الحدائق وتصميم اللاندسكيب.', icon: 'military_tech' },
+        { key: 'team', title: 'فريق متخصص', desc: 'نخبة من المهندسين والفنيين ذوي الكفاءة العالية.', icon: 'groups' },
+        { key: 'speed', title: 'سرعة الإنجاز', desc: 'تنفيذ دقيق مع الالتزام التام بالجداول الزمنية المحددة.', icon: 'timer' },
+        { key: 'quality', title: 'جودة استثنائية', desc: 'نستخدم أفضل المواد والخامات لضمان استدامة وجمال مشاريعنا.', icon: 'verified' },
+        { key: 'warranty', title: 'ضمان شامل', desc: 'نقدم ضمانات حقيقية على جميع أعمالنا لراحتك واطمئنانك.', icon: 'gpp_good' },
+        { key: 'support', title: 'دعم مستمر', desc: 'خدمة عملاء متميزة ومتابعة دورية بعد تسليم المشروع.', icon: 'support_agent' }
     ];
-
-    const testimonialKeys = [
-        'item1',
-        'item2',
-        'item3'
-    ];
+    const testimonialKeys = ['item1', 'item2', 'item3'];
 
     const getServiceImage = (key) => {
         const defaultImages = {
-            maintenance: 'https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop',
-            caravans: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0JAHsObzIwnKDCWmYTUyAsR9C7WINbtHiv7-SNPFkwpvyHrGM42q9H2J-Ee7DLoDv4ZlMqlXqVtRvDB8vhp8nYJohCzmTUqr5HcXUp2SHaYN4S_QfhWu6bX_c7gpYGuWPRa3TtWsyF62L3fbjnXlfn_Kh-HQJS1zAnRNrpSODl5zr5LVSSkKw1K7FuK46TOtZOwKzrUUQO90P_O0bee6_wDBb7dO-38mIlKKEpPBEQdmTbOAymBm0rvhuCFlMrx_V9LhK3fdjmCeF',
-            portacabins: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop',
-            renovation: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=2070&auto=format&fit=crop',
-            insulation: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070&auto=format&fit=crop',
-            electrical: 'https://images.unsplash.com/photo-1621905252507-b35492d90cb4?q=80&w=2069&auto=format&fit=crop'
+            maintenance: 'https://images.unsplash.com/photo-1558904541-efa843a96f0d?q=80&w=2070&auto=format&fit=crop',
+            caravans: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop',
+            portacabins: 'https://images.unsplash.com/photo-1585068285521-1b9134a4c522?q=80&w=2070&auto=format&fit=crop',
+            renovation: 'https://images.unsplash.com/photo-1575409166699-d4bc5a3de711?q=80&w=2070&auto=format&fit=crop',
+            insulation: 'https://images.unsplash.com/photo-1605810753065-22442ec9a5fb?q=80&w=2070&auto=format&fit=crop',
+            electrical: 'https://images.unsplash.com/photo-1563514253-34e8c1bfa70f?q=80&w=2070&auto=format&fit=crop'
         };
         return pageContents?.[`services.details.${key}.image`] || defaultImages[key] || defaultImages.maintenance;
     };
-    // Helper function to get properly formatted background URLs
+
     const getBgUrl = (key, defaultUrl) => {
         const val = pageContents?.[key];
         if (!val) return defaultUrl;
@@ -67,54 +63,47 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
     };
 
     return (
-        <div className="bg-[#f8f7f6] dark:bg-[#071324] min-h-screen text-gray-800 dark:text-gray-100 font-display selection:bg-[#C9A227] selection:text-[#0B1F3A]" dir="rtl" lang="ar" style={{ fontFamily: '"Almarai", "Manrope", sans-serif' }}>
-            <Head>
-                <title>{pageContents?.['services.hero.title'] ? `${pageContents['services.hero.title']} - ${siteName}` : `خدماتنا - ${siteName}`}</title>
-                <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet" />
-
-                <style>{`
-                    .hero-gradient { background-image: linear-gradient(180deg, rgba(11,31,58,0.5) 0%, rgba(11,31,58,0.95) 100%); }
-                    .gold-gradient { background-image: linear-gradient(135deg, #e3c059 0%, #C9A227 100%); }
-                    .text-gold { color: #C9A227; }
-                    .hover-zoom-img:hover { transform: scale(1.03); }
-                    .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
-                `}</style>
-            </Head>
+        <div className="bg-[#f8f7f6] dark:bg-[#022C22] min-h-screen text-gray-800 dark:text-gray-100 font-display selection:bg-[#16A34A] selection:text-[#064E3B]" dir="rtl" lang="ar" style={{ fontFamily: '"Almarai", "Manrope", sans-serif' }}>
+            <SeoHead
+                title={pageContents?.['services.hero.title']
+                    ? `${siteName} | ${pageContents['services.hero.title']}`
+                    : `${siteName} | خدمات تنسيق وتصميم الحدائق`}
+                description={pageContents?.['services.hero.subtitle'] || 'حلول هندسية وزراعية متكاملة لتحويل مساحاتك إلى واحات خضراء.'}
+            />
 
             <Navbar />
 
             {/* 1) HERO SECTION */}
-            <section className="relative h-[65vh] min-h-[550px] flex items-center justify-center overflow-hidden">
+            <section className="relative min-h-[100svh] md:min-h-[600px] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        alt={pageContents?.['services.hero.title'] || 'خدمات الصيانة والتشييد الفاخر'}
+                        alt={pageContents?.['services.hero.title'] || 'Hero Background'}
                         className="w-full h-full object-cover transform scale-105 animate-[pulse_20s_infinite_alternate]"
                         src={getBgUrl('services.hero.background_image', '/images/services_hero_bg.png')}
                     />
-                    <div className="absolute inset-0 bg-[#0B1F3A]/70 mix-blend-multiply"></div>
-                    <div className="absolute inset-0 hero-gradient"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#064E3B]/90 via-[#064E3B]/70 to-[#022C22]"></div>
                 </div>
 
                 <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mt-20">
                     {pageContents?.['services.grid.badge'] && (
-                        <span className="inline-block py-1.5 px-4 rounded-full border border-[#C9A227]/30 text-[#C9A227] font-bold text-sm tracking-widest uppercase mb-6 backdrop-blur shadow-sm">
+                        <span className="inline-block py-2 px-6 rounded-full bg-white/10 dark:bg-white/5 border border-white/20 backdrop-blur-md text-[#16A34A] font-bold text-xs md:text-sm tracking-widest uppercase mb-6 shadow-xl">
                             {pageContents?.['services.grid.badge'] ?? 'خدماتنا الشاملة'}
                         </span>
                     )}
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight drop-shadow-xl reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000">
-                        {pageContents?.['services.hero.title'] ?? 'خدمات صيانة وتنفيذ بمعايير احترافية'}
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight drop-shadow-2xl reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000">
+                        {pageContents?.['services.hero.title'] ?? 'تصميم وتنسيق حدائق بمعايير استثنائية'}
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed font-light reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100">
-                        {pageContents?.['services.hero.subtitle'] ?? 'نقدم حلول متكاملة للصيانة والتنفيذ بأعلى جودة.'}
+                    <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-light reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-100 px-2">
+                        {pageContents?.['services.hero.subtitle'] ?? 'حلول متكاملة نصنع بها من مساحاتك الخارجية لوحات فنية تنبض بالحياة.'}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 delay-200">
                         {pageContents?.['services.hero.primary_button_text'] && (
-                            <Link href={`${route('contact')}#contact-form-section`} className="gold-gradient hover:brightness-110 text-[#0B1F3A] font-bold py-4 px-10 rounded-lg transition-all duration-300 shadow-[0_0_20px_rgba(201,162,39,0.3)] hover:-translate-y-1 text-lg">
+                            <Link href={`${route('contact')}#contact-form-section`} className="w-full sm:w-auto bg-gradient-to-l from-[#4ADE80] to-[#16A34A] text-[#064E3B] font-bold py-3 md:py-4 px-8 md:px-10 rounded-xl transition-all duration-300 shadow-[0_8px_25px_rgba(201,162,39,0.4)] hover:shadow-[0_12px_35px_rgba(201,162,39,0.6)] hover:-translate-y-1 text-base md:text-lg">
                                 {pageContents?.['services.hero.primary_button_text'] ?? 'اطلب عرض سعر'}
                             </Link>
                         )}
                         {pageContents?.['services.hero.secondary_button_text'] && (
-                            <Link href={`${route('contact')}#contact-form-section`} className="border border-white/30 hover:bg-white hover:text-[#0B1F3A] text-white font-bold py-4 px-10 rounded-lg transition-all duration-300 backdrop-blur-sm hover:-translate-y-1 text-lg">
+                            <Link href={`${route('contact')}#contact-form-section`} className="w-full sm:w-auto border border-white/30 bg-white/5 hover:bg-white/20 text-white font-bold py-3 md:py-4 px-8 md:px-10 rounded-xl transition-all duration-300 backdrop-blur-md hover:-translate-y-1 text-base md:text-lg">
                                 {pageContents?.['services.hero.secondary_button_text'] ?? 'تواصل معنا'}
                             </Link>
                         )}
@@ -122,32 +111,27 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
                 </div>
             </section>
 
-            {/* GALLERY – right below hero */}
-            <GallerySection images={galleryImages} title="صور من أعمالنا" />
-
-            {/* 2) MAIN SERVICES GRID */}
-            <section className="py-24 bg-[#f8f7f6] dark:bg-[#071324] relative z-20">
-                <div className="max-w-7xl mx-auto px-4 z-10 relative -mt-32">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {serviceKeys.map((key, index) => {
-                            const icon = pageContents?.[`services.grid.${key}.icon`];
-                            const title = pageContents?.[`services.grid.${key}.title`];
-                            const desc = pageContents?.[`services.grid.${key}.description`];
-                            const buttonText = pageContents?.[`services.grid.${key}.button_text`];
-
-                            if (!title && !desc) return null;
-
+            {/* 2) MAIN SERVICES GRID (Glassmorphism effect) */}
+            <section className="py-16 md:py-24 relative z-20">
+                <div className="max-w-7xl mx-auto px-4 relative -mt-20 md:-mt-32">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                        {serviceKeys.map((item, index) => {
+                            const key = item.key;
+                            const icon = pageContents?.[`services.grid.${key}.icon`] || item.icon;
+                            const title = pageContents?.[`services.grid.${key}.title`] || item.title;
+                            const desc = pageContents?.[`services.grid.${key}.description`] || item.desc;
+                            
                             return (
-                                <div key={key} className="bg-white dark:bg-[#0B1F3A] p-8 rounded-2xl shadow-xl dark:shadow-none border border-gray-100 dark:border-white/5 hover:border-[#C9A227]/50 transition-all duration-500 group hover:-translate-y-2 reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${(index % 3) * 100}ms` }}>
-                                    <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-white/5 flex items-center justify-center text-[#C9A227] mb-8 group-hover:scale-110 group-hover:bg-[#C9A227] group-hover:text-[#0B1F3A] transition-all duration-500 shadow-sm">
-                                        <DynamicIcon name={icon ?? 'home_repair_service'} className="text-3xl" />
+                                <div key={key} className="bg-white/80 dark:bg-white/5 backdrop-blur-xl p-8 rounded-3xl shadow-xl dark:shadow-2xl border border-white/40 dark:border-white/10 hover:border-[#16A34A]/50 transition-all duration-500 group hover:-translate-y-2 reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${(index % 3) * 100}ms` }}>
+                                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-200 dark:from-white/10 dark:to-transparent flex items-center justify-center text-[#16A34A] mb-6 md:mb-8 group-hover:scale-110 group-hover:from-[#16A34A] group-hover:to-[#4ADE80] group-hover:text-[#064E3B] transition-all duration-500 shadow-sm border border-white/20">
+                                        <DynamicIcon name={icon} className="text-2xl md:text-3xl" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-[#C9A227] transition-colors">{title ?? ''}</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-8 h-16 line-clamp-3">
-                                        {desc ?? ''}
+                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 md:mb-4 group-hover:text-[#16A34A] transition-colors">{title}</h3>
+                                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-6 md:mb-8 h-auto min-h-[4rem] line-clamp-3">
+                                        {desc}
                                     </p>
-                                    <a href={`#service-${key}`} className="inline-flex items-center gap-2 text-[#0B1F3A] dark:text-white font-bold group-hover:text-[#C9A227] transition-colors">
-                                        {buttonText ?? 'عرض التفاصيل'}
+                                    <a href={`#service-${key}`} className="inline-flex items-center gap-2 text-[#064E3B] dark:text-white font-bold group-hover:text-[#16A34A] transition-colors">
+                                        عرض التفاصيل
                                         <DynamicIcon name="arrow_forward" className="text-sm rotate-180 transition-transform group-hover:-translate-x-1" />
                                     </a>
                                 </div>
@@ -158,57 +142,48 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
             </section>
 
             {/* 3) DETAILED SERVICE SECTIONS */}
-            <section className="bg-white dark:bg-[#040A12] py-20 border-t border-gray-100 dark:border-white/5">
-                <div className="max-w-7xl mx-auto px-4 flex flex-col gap-32">
-                    {serviceKeys.map((key, index) => {
-                        const icon = pageContents?.[`services.details.${key}.icon`];
-                        const badge = pageContents?.[`services.details.${key}.badge`];
-                        const title = pageContents?.[`services.details.${key}.title`];
-                        const desc = pageContents?.[`services.details.${key}.description`];
-                        const feature1 = pageContents?.[`services.details.${key}.feature1`];
-                        const feature2 = pageContents?.[`services.details.${key}.feature2`];
-                        const feature3 = pageContents?.[`services.details.${key}.feature3`];
-                        const buttonText = pageContents?.[`services.details.${key}.button_text`];
-
-                        if (!title && !desc) return null;
+            <section className="bg-white dark:bg-[#022C22] py-16 md:py-20 relative">
+                <div className="max-w-7xl mx-auto px-4 flex flex-col gap-20 md:gap-32">
+                    {serviceKeys.map((item, index) => {
+                        const key = item.key;
+                        const title = pageContents?.[`services.details.${key}.title`] || item.title;
+                        const desc = pageContents?.[`services.details.${key}.description`] || item.desc;
+                        const features = [
+                            pageContents?.[`services.details.${key}.feature1`] || 'جودة واحترافية في التنفيذ',
+                            pageContents?.[`services.details.${key}.feature2`] || 'تصاميم عصرية تناسب تطلعاتك',
+                            pageContents?.[`services.details.${key}.feature3`] || 'أسعار تنافسية ومناسبة'
+                        ].filter(Boolean);
 
                         return (
-                            <div id={`service-${key}`} key={key} className={`flex flex-col lg:flex-row items-center gap-16 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
-                                <div className="w-full lg:w-1/2">
-                                    <div className="relative rounded-3xl overflow-hidden shadow-2xl group">
-                                        <img src={getServiceImage(key)} alt={title} className="w-full h-[400px] object-cover transition-transform duration-1000 group-hover:scale-105" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/80 to-transparent opacity-60"></div>
-                                        <div className="absolute bottom-6 right-6 w-16 h-16 bg-[#C9A227] rounded-2xl flex items-center justify-center text-[#0B1F3A] shadow-lg">
-                                            <DynamicIcon name={icon ?? 'home_repair_service'} className="text-4xl" />
-                                        </div>
+                            <div id={`service-${key}`} key={key} className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-16 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000 ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}>
+                                <div className="w-full lg:w-1/2 relative group">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-[#16A34A]/20 to-transparent blur-2xl rounded-full transform -rotate-6 group-hover:rotate-0 transition-transform duration-700"></div>
+                                    <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 dark:border-white/5">
+                                        <img src={getServiceImage(key)} alt={title} className="w-full h-[300px] sm:h-[400px] object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#064E3B] via-transparent to-transparent opacity-80"></div>
                                     </div>
                                 </div>
 
-                                <div className="w-full lg:w-1/2 space-y-6">
-                                    <div className="flex items-center gap-4 mb-2">
-                                        <div className="h-[2px] w-12 bg-[#C9A227]"></div>
-                                        <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase">{badge ?? 'تفاصيل الخدمة'}</span>
+                                <div className="w-full lg:w-1/2 space-y-5 md:space-y-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-[2px] w-8 md:w-12 bg-[#16A34A]"></div>
+                                        <span className="text-[#16A34A] font-bold tracking-widest text-xs md:text-sm uppercase">تفاصيل الخدمة</span>
                                     </div>
-                                    <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-tight">
-                                        {title ?? ''}
+                                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white leading-tight">
+                                        {title}
                                     </h2>
-                                    <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
-                                        {desc ?? ''}
+                                    <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                                        {desc}
                                     </p>
-                                    <ul className="space-y-4 pt-4">
-                                        {[feature1, feature2, feature3].filter(Boolean).map((feat, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-200 font-medium">
-                                                <DynamicIcon name="check_circle" className="text-[#C9A227] drop-shadow-sm" />
-                                                {feat}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {buttonText && (
-                                        <div className="pt-6">
-                                            <Link href={`${route('contact')}#contact-form-section`} className="inline-block border-2 border-[#0B1F3A] dark:border-white text-[#0B1F3A] dark:text-white hover:bg-[#0B1F3A] hover:text-white dark:hover:bg-white dark:hover:text-[#0B1F3A] font-bold py-3 px-8 rounded-lg transition-all duration-300">
-                                                {buttonText ?? 'طلب الخدمة الآن'}
-                                            </Link>
-                                        </div>
+                                    {features.length > 0 && (
+                                        <ul className="space-y-3 pt-2">
+                                            {features.map((feat, i) => (
+                                                <li key={i} className="flex items-center gap-3 text-gray-700 dark:text-gray-200 font-medium bg-gray-50 dark:bg-white/5 px-4 py-3 rounded-xl border border-gray-100 dark:border-white/5">
+                                                    <DynamicIcon name="check_circle" className="text-[#16A34A]" />
+                                                    {feat}
+                                                </li>
+                                            ))}
+                                        </ul>
                                     )}
                                 </div>
                             </div>
@@ -217,32 +192,31 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
                 </div>
             </section>
 
-            {/* 4) WHY CHOOSE US SECTION (STRENGTH) */}
-            <section className="py-24 relative bg-[#0B1F3A] overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')] opacity-20"></div>
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C9A227]/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
+            {/* 4) WHY CHOOSE US (STRENGTH) */}
+            <section className="py-20 md:py-28 relative bg-[#064E3B] overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#16A34A]/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none hidden md:block"></div>
+                
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <div className="text-center mb-16 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-                        <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase block mb-3">نقاط القوة</span>
-                        <h2 className="text-4xl md:text-5xl font-black text-white">{pageContents?.['services.strength.title'] ?? 'لماذا نعد الخيار الأمثل؟'}</h2>
-                        <div className="w-24 h-1 gold-gradient mx-auto mt-6 rounded-full"></div>
+                        <span className="text-[#16A34A] font-bold tracking-widest text-sm uppercase block mb-3">نقاط القوة</span>
+                        <h2 className="text-3xl md:text-5xl font-black text-white">{pageContents?.['services.strength.title'] ?? 'لماذا نحن الخيار الأمثل؟'}</h2>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-10">
-                        {strengthKeys.map((key, idx) => {
-                            const icon = pageContents?.[`services.strength.${key}.icon`];
-                            const title = pageContents?.[`services.strength.${key}.title`];
-                            const desc = pageContents?.[`services.strength.${key}.description`];
-
-                            if (!title && !desc) return null;
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                        {strengthKeys.map((item, idx) => {
+                            const key = item.key;
+                            const icon = pageContents?.[`services.strength.${key}.icon`] || item.icon;
+                            const title = pageContents?.[`services.strength.${key}.title`] || item.title;
+                            const desc = pageContents?.[`services.strength.${key}.description`] || item.desc;
 
                             return (
-                                <div key={key} className="glass-card rounded-2xl p-8 text-center hover:-translate-y-2 transition-transform duration-500 reveal-on-scroll opacity-0 translate-y-10 border-t border-[#C9A227]/10" style={{ transitionDelay: `${idx * 100}ms` }}>
-                                    <div className="w-16 h-16 mx-auto rounded-full bg-[#C9A227]/10 flex items-center justify-center text-[#C9A227] mb-6">
-                                        <DynamicIcon name={icon ?? 'military_tech'} className="text-3xl" />
+                                <div key={key} className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 hover:bg-white/10 transition-all duration-500 reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${idx * 100}ms` }}>
+                                    <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#16A34A]/20 to-transparent flex items-center justify-center text-[#16A34A] mb-6 border border-[#16A34A]/30">
+                                        <DynamicIcon name={icon} className="text-3xl" />
                                     </div>
-                                    <h4 className="text-xl font-bold text-white mb-2">{title ?? ''}</h4>
-                                    <p className="text-gray-400 text-sm">{desc ?? ''}</p>
+                                    <h4 className="text-xl font-bold text-white mb-3">{title}</h4>
+                                    <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
                                 </div>
                             );
                         })}
@@ -251,39 +225,39 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
             </section>
 
             {/* 5) PROJECT PREVIEW SECTION */}
-            {projects && projects.length > 0 && (
-                <section className="py-24 bg-[#f8f7f6] dark:bg-[#071324] border-t border-gray-100 dark:border-white/5">
+            {projects?.length > 0 && (
+                <section className="py-20 md:py-28 bg-[#f8f7f6] dark:bg-[#022C22] border-t border-gray-100 dark:border-white/5">
                     <div className="max-w-7xl mx-auto px-4">
-                        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-6 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-                            <div>
-                                <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase block mb-3">{pageContents?.['services.projects.badge'] ?? 'سجل أعمالنا'}</span>
-                                <h2 className="text-4xl font-black text-gray-900 dark:text-white">{pageContents?.['services.projects.title'] ?? 'أحدث المشاريع المنفذة'}</h2>
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-12 md:mb-16 gap-6 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+                            <div className="text-center md:text-right">
+                                <span className="text-[#16A34A] font-bold tracking-widest text-sm uppercase block mb-2">{pageContents?.['services.projects.badge'] ?? 'سجل أعمالنا'}</span>
+                                <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white">{pageContents?.['services.projects.title'] ?? 'أحدث المشاريع المنجزة'}</h2>
                             </div>
-                            {pageContents?.['services.projects.view_all_text'] && (
-                                <Link href={route('our-projects.index')} className="gold-gradient text-[#0B1F3A] font-bold px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 flex items-center gap-2">
-                                    {pageContents?.['services.projects.view_all_text'] ?? 'عرض جميع المشاريع'}
-                                    <DynamicIcon name="arrow_forward" className="text-sm rotate-180" />
-                                </Link>
-                            )}
+                            <Link href={route('our-projects.index')} className="group flex items-center gap-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                                عرض الكل
+                                <DynamicIcon name="arrow_forward" className="text-sm rotate-180 transition-transform group-hover:-translate-x-1" />
+                            </Link>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             {projects.map((project, idx) => (
-                                <Link href={route('our-projects.show', project.id)} key={project.id} className="group rounded-2xl overflow-hidden shadow-md bg-white dark:bg-[#0B1F3A] border border-gray-100 dark:border-white/5 hover:border-[#C9A227]/50 block transition-all hover:-translate-y-2 reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${idx * 150}ms` }}>
-                                    <div className="h-48 overflow-hidden relative">
+                                <Link href={route('our-projects.show', project.id)} key={project.id} className="group rounded-3xl overflow-hidden shadow-lg bg-white dark:bg-[#064E3B] border border-gray-100 dark:border-white/5 hover:border-[#16A34A]/50 block transition-all duration-500 hover:-translate-y-2 reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${idx * 150}ms` }}>
+                                    <div className="h-56 overflow-hidden relative">
                                         <img
                                             src={project.image_path ? `/storage/${project.image_path}` : (project.image_url?.startsWith('http') ? project.image_url : `/storage/${project.image_url}`)}
                                             alt={project.title}
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                             onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop'; }}
                                         />
-                                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
-                                        <div className="absolute top-4 right-4 bg-white/95 dark:bg-[#0B1F3A]/95 text-[#C9A227] text-xs font-bold px-3 py-1 rounded-full shadow-sm backdrop-blur">
-                                            {project.category}
-                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+                                        {project.category && (
+                                            <div className="absolute top-4 right-4 bg-white/90 dark:bg-[#064E3B]/90 text-[#16A34A] text-xs font-bold px-4 py-1.5 rounded-full shadow-sm backdrop-blur-md">
+                                                {project.category}
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="p-5">
-                                        <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1">{project.title || project.title_ar}</h3>
+                                    <div className="p-6">
+                                        <h3 className="font-bold text-lg text-gray-900 dark:text-white line-clamp-1 group-hover:text-[#16A34A] transition-colors">{project.title || project.title_ar}</h3>
                                     </div>
                                 </Link>
                             ))}
@@ -293,36 +267,34 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
             )}
 
             {/* 6) CLIENT TESTIMONIALS */}
-            <section className="py-24 bg-white dark:bg-[#040A12]">
+            <section className="py-20 md:py-28 bg-white dark:bg-[#040A12] relative">
                 <div className="max-w-7xl mx-auto px-4 text-center reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-                    <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase block mb-3">{pageContents?.['services.testimonials.badge'] ?? 'شركاء النجاح'}</span>
-                    <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-16">{pageContents?.['services.testimonials.title'] ?? 'ثقة تبنى على الإنجازات'}</h2>
+                    <span className="text-[#16A34A] font-bold tracking-widest text-sm uppercase block mb-3">{pageContents?.['services.testimonials.badge'] ?? 'شركاء النجاح'}</span>
+                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-16">{pageContents?.['services.testimonials.title'] ?? 'ثقة تبنى على الإنجازات'}</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-right">
                         {testimonialKeys.map((key) => {
                             const text = pageContents?.[`services.testimonials.${key}.text`];
                             const name = pageContents?.[`services.testimonials.${key}.name`];
                             const company = pageContents?.[`services.testimonials.${key}.company`];
-                            const position = pageContents?.[`services.testimonials.${key}.position`];
 
                             if (!text && !name) return null;
 
                             return (
-                                <div key={key} className="bg-gray-50 dark:bg-[#0B1F3A] p-10 rounded-3xl border border-gray-100 dark:border-white/5 relative">
-                                    <DynamicIcon name="format_quote" className="absolute top-8 left-8 text-5xl text-[#C9A227]/20 rotate-180" />
-                                    <div className="flex gap-1 text-[#C9A227] mb-6">
+                                <div key={key} className="bg-[#f8f7f6] dark:bg-white/5 backdrop-blur-sm p-10 rounded-3xl border border-gray-100 dark:border-white/5 relative group hover:-translate-y-2 transition-transform duration-500">
+                                    <DynamicIcon name="format_quote" className="absolute top-6 left-6 text-6xl text-[#16A34A]/10 group-hover:text-[#16A34A]/20 transition-colors rotate-180" />
+                                    <div className="flex gap-1 text-[#16A34A] mb-6">
                                         {[1, 2, 3, 4, 5].map(star => <DynamicIcon key={star} name="star" className="text-sm" />)}
                                     </div>
-                                    <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-8 relative z-10 italic">"{text ?? ''}"</p>
+                                    <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-8 relative z-10 italic">"{text}"</p>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#0B1F3A] to-gray-800 dark:from-white/10 dark:to-white/5 flex items-center justify-center font-bold text-white text-xl shadow-inner border border-white/10">
+                                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#064E3B] to-gray-800 dark:from-white/10 dark:to-transparent flex items-center justify-center font-bold text-white text-xl shadow-inner border border-white/10">
                                             {(name || ' ').charAt(0)}
                                         </div>
                                         <div>
-                                            <div className="font-bold text-gray-900 dark:text-white text-lg">{name ?? ''}</div>
-                                            <div className="text-sm text-[#C9A227]">
-                                                {position ? `${position} ` : ''}
-                                                {company ? `- ${company}` : ''}
+                                            <div className="font-bold text-gray-900 dark:text-white text-lg">{name}</div>
+                                            <div className="text-sm text-[#16A34A]">
+                                                {company}
                                             </div>
                                         </div>
                                     </div>
@@ -333,54 +305,30 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
                 </div>
             </section>
 
-            {/* 7) FINAL CTA SECTION */}
-            <section className="relative py-28 text-center bg-[#071324] overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img src={getBgUrl('services.cta.background_image', '/images/services_hero_bg.png')} alt="bg" className="w-full h-full object-cover filter blur-sm scale-110 opacity-30" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/95 to-[#0B1F3A]/80 flex"></div>
-                    <div className="absolute inset-0 hero-gradient"></div>
-                </div>
-
-                <div className="relative z-10 max-w-4xl mx-auto px-4 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000">
-                    <DynamicIcon name={pageContents?.['services.cta.icon'] ?? 'engineering'} className="text-[#C9A227] text-6xl mb-6" />
-                    <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
-                        {pageContents?.['services.cta.title'] ?? 'هل لديك مشروع قادم؟'}
-                    </h2>
-                    <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-                        {pageContents?.['services.cta.description'] ?? 'نحن هنا لنحول أفكارك إلى واقع.'}
-                    </p>
-                    {pageContents?.['services.cta.button_text'] && (
-                        <Link href={`${route('contact')}#contact-form-section`} className="inline-flex items-center gap-3 bg-[#C9A227] hover:bg-white text-[#0B1F3A] font-bold text-xl py-5 px-12 rounded-xl transition-all duration-300 shadow-[0_10px_30px_rgba(201,162,39,0.3)] hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(201,162,39,0.4)]">
-                            {pageContents?.['services.cta.button_text'] ?? 'اطلب استشارة مجانية'}
-                            <DynamicIcon name="arrow_forward" className="rotate-180" />
-                        </Link>
-                    )}
-                </div>
-            </section>
-
-            {/* GALLERY IMAGES SECTION */}
-            {galleryImages.length > 0 && (
-                <section className="py-24 bg-[#f8f7f6] dark:bg-[#071324] border-t border-gray-100 dark:border-white/5">
+            {/* 7) GALLERY IMAGES SECTION (Masonry with Glassmorphism Hover) */}
+            {galleryImages?.length > 0 && (
+                <section className="py-20 md:py-28 bg-[#f8f7f6] dark:bg-[#022C22] border-t border-gray-100 dark:border-white/5">
                     <div className="max-w-7xl mx-auto px-4">
-                        <div className="text-center mb-14 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-                            <span className="text-[#C9A227] font-bold tracking-widest text-sm uppercase block mb-3">معرض أعمالنا</span>
-                            <h2 className="text-4xl font-black text-gray-900 dark:text-white">صور من أعمالنا</h2>
-                            <div className="w-20 h-1 bg-gradient-to-r from-[#e3c059] to-[#C9A227] mx-auto mt-5 rounded-full"></div>
+                        <div className="text-center mb-16 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+                            <span className="text-[#16A34A] font-bold tracking-widest text-sm uppercase block mb-3">معرض الصور</span>
+                            <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white">أعمالنا على أرض الواقع</h2>
                         </div>
-                        <div className="columns-2 sm:columns-3 lg:columns-4 gap-4 space-y-4">
-                            {galleryImages.map((img) => (
-                                <div key={img.id} className="break-inside-avoid rounded-2xl overflow-hidden shadow-md group">
+                        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+                            {galleryImages.map((img, idx) => (
+                                <div key={img.id} className="break-inside-avoid relative rounded-3xl overflow-hidden shadow-md group reveal-on-scroll opacity-0 translate-y-10" style={{ transitionDelay: `${(idx % 4) * 100}ms` }}>
                                     <img
                                         src={`/storage/${img.image_path}`}
                                         alt={img.title || 'صورة أعمال'}
-                                        className="w-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                        className="w-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         loading="lazy"
                                     />
-                                    {img.title && (
-                                        <div className="bg-white dark:bg-[#0B1F3A] px-3 py-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
-                                            {img.title}
-                                        </div>
-                                    )}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#064E3B]/90 via-[#064E3B]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                                        {img.title && (
+                                            <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 text-white font-bold text-lg backdrop-blur-sm bg-white/10 px-4 py-2 rounded-xl border border-white/20">
+                                                {img.title}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -388,10 +336,29 @@ export default function ServicesIndex({ projects = [], galleryImages = [] }) {
                 </section>
             )}
 
-            <footer className="bg-[#040A12] py-8 text-center text-sm text-gray-500 border-t border-white/5 relative z-20">
-                <p>نظام صيانة الكرفانات والبركسات © {new Date().getFullYear()} — صُمِّم بواسطة <a href="https://wa.me/967781582995" target="_blank" rel="noopener noreferrer" className="text-[#C9A227] font-bold hover:underline">شركة Aboras Soft</a></p>
-            </footer>
+            {/* 8) FINAL CTA SECTION */}
+            <section className="relative py-24 md:py-32 text-center bg-[#022C22] overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img src={getBgUrl('services.cta.background_image', '/images/services_hero_bg.png')} alt="CTA Background" className="w-full h-full object-cover filter blur-md scale-110 opacity-20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#064E3B] via-[#064E3B]/90 to-transparent"></div>
+                </div>
 
+                <div className="relative z-10 max-w-3xl mx-auto px-4 reveal-on-scroll opacity-0 translate-y-10 transition-all duration-1000">
+                    <DynamicIcon name={pageContents?.['services.cta.icon'] ?? 'rocket_launch'} className="text-[#16A34A] text-6xl mb-8 animate-bounce" />
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
+                        {pageContents?.['services.cta.title'] ?? 'هل لديك مشروع قادم؟'}
+                    </h2>
+                    <p className="text-lg md:text-xl text-gray-300 mb-10 font-light leading-relaxed">
+                        {pageContents?.['services.cta.description'] ?? 'نحن هنا لنحول أفكارك وتصوراتك إلى واقع ملموس باحترافية عالية.'}
+                    </p>
+                    <Link href={`${route('contact')}#contact-form-section`} className="inline-flex w-full sm:w-auto items-center justify-center gap-3 bg-gradient-to-l from-[#4ADE80] to-[#16A34A] text-[#064E3B] font-bold text-lg py-4 px-10 rounded-2xl transition-all duration-300 shadow-[0_10px_30px_rgba(201,162,39,0.3)] hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(201,162,39,0.5)]">
+                        {pageContents?.['services.cta.button_text'] ?? 'اطلب استشارة مجانية الآن'}
+                        <DynamicIcon name="arrow_forward" className="rotate-180" />
+                    </Link>
+                </div>
+            </section>
+
+            <Footer />
         </div>
     );
 }

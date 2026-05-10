@@ -7,12 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\Content;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 
 class ContentController extends Controller
 {
     public function index()
     {
-        $contents = Content::latest()->get();
+        $contents = Cache::remember('admin_contents_index', 60, function () {
+            return Content::query()
+                ->select(['id', 'page', 'section', 'key', 'type', 'value', 'extra_value', 'status'])
+                ->orderBy('page')
+                ->orderBy('section')
+                ->orderBy('id')
+                ->get();
+        });
         return Inertia::render('Admin/Contents/Index', [
             'contents' => $contents
         ]);
@@ -94,19 +102,27 @@ class ContentController extends Controller
         foreach ($validated['contents'] as $index => $item) {
             $content = Content::where('key', $item['key'])->first();
             
-            if ($content) {
-                if ($content->type === 'image' && $request->hasFile("contents.{$index}.file")) {
-                    if ($content->value && Storage::disk('public')->exists($content->value) && !str_starts_with($content->value, 'http')) {
-                        Storage::disk('public')->delete($content->value);
-                    }
-                    $path = $request->file("contents.{$index}.file")->store('contents', 'public');
-                    $content->value = $path;
-                } elseif ($content->type !== 'image') {
-                    $content->value = $item['value'] ?? $content->value;
-                }
-                
-                $content->save();
+            if (!$content) {
+                $content = new Content();
+                $content->page = $page;
+                $content->key = $item['key'];
+                $content->section = $item['section'] ?? 'عام';
+                $content->type = $item['type'] ?? 'short_text';
+                $content->status = 'published';
+                $content->created_by = auth()->id();
             }
+
+            if ($content->type === 'image' && $request->hasFile("contents.{$index}.file")) {
+                if ($content->value && Storage::disk('public')->exists($content->value) && !str_starts_with($content->value, 'http')) {
+                    Storage::disk('public')->delete($content->value);
+                }
+                $path = $request->file("contents.{$index}.file")->store('contents', 'public');
+                $content->value = $path;
+            } elseif ($content->type !== 'image') {
+                $content->value = $item['value'] ?? $content->value;
+            }
+            
+            $content->save();
         }
 
         return redirect()->back()->with('success', 'تم حفظ التعديلات بنجاح');

@@ -17,16 +17,21 @@ class BackgroundController extends Controller
      * عند تغيير خلفية أي صفحة يجب مسح الـ cache الخاص بها.
      */
     protected array $pageCacheKeys = [
-        'page_contents_caravans',
-        'page_contents_portacabins',
-        'page_contents_buildings',
+        'page_contents_artificial_grass',
+        'page_contents_water_features',
+        'page_contents_pergolas',
+        'page_contents_landscaping',
+        'page_contents_design',
         'home_site_contents',
         'home_projects',
         'services_projects',
-        'projects_caravans',
-        'projects_portacabins',
-        'projects_buildings',
+        'projects_artificial_grass',
+        'projects_water_features',
+        'projects_pergolas',
+        'projects_landscaping',
+        'projects_design',
         'published_page_contents',
+        'admin_contents_index',
     ];
 
     public function index()
@@ -39,6 +44,7 @@ class BackgroundController extends Controller
                        str_contains(strtolower($content->key), 'cta_bg') ||
                        str_contains(strtolower($content->key), 'hero_bg') ||
                        str_contains(strtolower($content->key), 'cta.background') ||
+                       str_contains(strtolower($content->key), 'why.image') ||
                        str_contains(strtolower($content->key), 'background');
             })
             ->groupBy('page');
@@ -63,7 +69,7 @@ class BackgroundController extends Controller
             $content->value = ImageOptimizer::storeAsWebP(
                 $request->file('image'),
                 'backgrounds',
-                1920, 1080, 85,
+                1280, 720, 65,
                 $oldPath
             );
         }

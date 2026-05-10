@@ -62,8 +62,8 @@ export default function BackgroundsIndex({ backgroundPages = {} }) {
         const objectUrl = URL.createObjectURL(file);
 
         img.onload = () => {
-            // Cap max dimension at 1920px to avoid giant files
-            const MAX_SIZE = 1920;
+            // Cap max dimension at 1280px
+            const MAX_SIZE = 1280;
             let { width, height } = img;
             if (width > MAX_SIZE || height > MAX_SIZE) {
                 const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height);
@@ -76,25 +76,27 @@ export default function BackgroundsIndex({ backgroundPages = {} }) {
             canvas.height = height;
             canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 
-            // Convert to WebP at 85% quality
+            // Convert to WebP at 50% quality for maximum compression
             canvas.toBlob((blob) => {
                 URL.revokeObjectURL(objectUrl);
                 if (!blob) return;
 
                 const compressedKB = (blob.size / 1024).toFixed(1);
-                const webpFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), {
-                    type: 'image/webp',
-                    lastModified: Date.now(),
-                });
 
-                setData('image', webpFile);
-                setCompressionInfo({ originalKB, compressedKB });
+                // Always use the SMALLER file (compressed vs original)
+                const useWebP = blob.size < file.size;
+                const finalFile = useWebP
+                    ? new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), { type: 'image/webp', lastModified: Date.now() })
+                    : file;
+
+                setData('image', finalFile);
+                setCompressionInfo({ originalKB, compressedKB, saved: useWebP });
 
                 // Show preview
                 const reader = new FileReader();
                 reader.onloadend = () => setImagePreview(reader.result);
-                reader.readAsDataURL(webpFile);
-            }, 'image/webp', 0.85);
+                reader.readAsDataURL(finalFile);
+            }, 'image/webp', 0.50);
         };
 
         img.onerror = () => {
@@ -254,16 +256,28 @@ export default function BackgroundsIndex({ backgroundPages = {} }) {
                             </div>
                             <InputError message={errors.image} className="mt-2" />
                             {compressionInfo && (
-                                <div className="mt-2 flex items-center gap-2 text-xs bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg px-3 py-2">
-                                    <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                                <div className={`mt-2 flex items-center gap-2 text-xs rounded-lg px-3 py-2 border ${
+                                    compressionInfo.saved
+                                        ? 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20'
+                                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                                }`}>
+                                    <span className="material-symbols-outlined text-[16px]">
+                                        {compressionInfo.saved ? 'check_circle' : 'info'}
+                                    </span>
                                     <span>
-                                        تم ضغط الصورة وتحويلها إلى <strong>WebP</strong> ✅ &nbsp;|&nbsp;
-                                        الحجم الأصلي: <strong>{compressionInfo.originalKB} KB</strong> &nbsp;→&nbsp;
-                                        بعد الضغط: <strong>{compressionInfo.compressedKB} KB</strong>
-                                        {compressionInfo.originalKB > compressionInfo.compressedKB && (
-                                            <span className="mr-1 text-green-700 dark:text-green-300">
-                                                (وفّر {(compressionInfo.originalKB - compressionInfo.compressedKB).toFixed(1)} KB)
-                                            </span>
+                                        {compressionInfo.saved ? (
+                                            <>
+                                                تم ضغط الصورة وتحويلها إلى <strong>WebP</strong> ✅ &nbsp;|&nbsp;
+                                                الحجم الأصلي: <strong>{compressionInfo.originalKB} KB</strong> &nbsp;→&nbsp;
+                                                بعد الضغط: <strong>{compressionInfo.compressedKB} KB</strong>
+                                                <span className="mr-1 font-bold">
+                                                    &nbsp;(وفّر {(compressionInfo.originalKB - compressionInfo.compressedKB).toFixed(1)} KB — {Math.round((1 - compressionInfo.compressedKB / compressionInfo.originalKB) * 100)}%)
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                ⚠️ الصورة الأصلية أصغر ({compressionInfo.originalKB} KB)، سيتم إرسالها مباشرة بدون تحويل.
+                                            </>
                                         )}
                                     </span>
                                 </div>

@@ -30,7 +30,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // FIX #1: Cache settings so we don't hit the DB on every request.
+        // Admin pages do not need the full public CMS payload on every request.
+        // Keeping props smaller dramatically speeds up Inertia navigation.
+        if ($request->is('admin*') || $request->is('profile*')) {
+            return [
+                ...parent::share($request),
+                'auth' => [
+                    'user' => $request->user(),
+                ],
+                'flash' => [
+                    'message' => fn () => $request->session()->get('message'),
+                    'success' => fn () => $request->session()->get('success'),
+                ],
+            ];
+        }
+
+        // Public: Cache settings so we don't hit the DB on every request.
         $settings = Cache::rememberForever('global_settings', function () {
             return \App\Models\Setting::all()->mapWithKeys(function ($item) {
                 return [$item->key => [
@@ -41,19 +56,18 @@ class HandleInertiaRequests extends Middleware
             })->toArray();
         });
 
-        // FIX #1 (cont.): Fetch the published content collection ONCE, then
-        // map it twice from the in-memory collection — zero extra DB queries.
+        // Public: Fetch the published content collection ONCE, then map it twice.
         $publishedContents = Cache::rememberForever('published_page_contents', function () {
             return \App\Models\Content::where('status', 'published')->get();
         });
 
-        $pageContents = $publishedContents->mapWithKeys(function ($item) {
-            return [$item->key => $item->value];
-        })->toArray();
+        $pageContents = $publishedContents
+            ->mapWithKeys(fn ($item) => [$item->key => $item->value])
+            ->toArray();
 
-        $pageContentExtras = $publishedContents->mapWithKeys(function ($item) {
-            return [$item->key => $item->extra_value];
-        })->toArray();
+        $pageContentExtras = $publishedContents
+            ->mapWithKeys(fn ($item) => [$item->key => $item->extra_value])
+            ->toArray();
 
         return [
             ...parent::share($request),

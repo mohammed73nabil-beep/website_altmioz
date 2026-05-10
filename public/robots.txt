@@ -1,2 +1,21 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# حظر صفحات الإدارة من الزحف
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+
+# السماح لصفحات الموقع العامة
+Allow: /
+Allow: /services/
+Allow: /about-us
+Allow: /contact-us
+Allow: /our-projects/
+Allow: /blog/
+
+# Sitemap
+Sitemap: http://localhost/sitemap.xml

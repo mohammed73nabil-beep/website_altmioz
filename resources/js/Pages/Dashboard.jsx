@@ -24,14 +24,14 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
     );
 
     const StatCard = ({ icon, iconBgColor, iconColor, label, value, link, extra, extraColor, extraIcon }) => (
-        <Link href={link} className="block bg-white dark:bg-[#1a1a1a] p-6 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-[#dba61f]/50 transition-all duration-300 group cursor-pointer hover:shadow-lg hover:shadow-[#dba61f]/5">
+        <Link href={link} className="block bg-white dark:bg-[#1a1a1a] p-6 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-[#22C55E]/50 transition-all duration-300 group cursor-pointer hover:shadow-lg hover:shadow-[#22C55E]/5">
             <div className="flex justify-between items-start mb-4">
-                <div className={`p-2.5 ${iconBgColor} rounded-xl ${iconColor} group-hover:scale-110 group-hover:bg-[#dba61f]/10 group-hover:text-[#dba61f] transition-all duration-300`}>
+                <div className={`p-2.5 ${iconBgColor} rounded-xl ${iconColor} group-hover:scale-110 group-hover:bg-[#22C55E]/10 group-hover:text-[#22C55E] transition-all duration-300`}>
                     <DynamicIcon name={icon} />
                 </div>
                 <div className="text-left">
                     <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{label}</p>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-[#dba61f] transition-colors">{value}</h3>
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-1 group-hover:text-[#22C55E] transition-colors">{value}</h3>
                 </div>
             </div>
             {extra && (
@@ -81,7 +81,7 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
                             {project.title_ar || project.title_en}
                         </td>
                         <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                            {project.category ?? 'كرفان'}
+                            {project.category ?? 'تنسيق حدائق'}
                         </td>
                         <td className="px-6 py-4">
                             <span className={`inline-flex px-2.5 py-1 rounded-md text-[10px] font-bold ${project.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'
@@ -110,11 +110,11 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
                 <div className="p-4 rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02]">
                     <div className="flex justify-between items-center mb-1">
                         <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">Uptime</h4>
-                        <span className="text-[#dba61f] text-sm font-bold">{health?.uptime}</span>
+                        <span className="text-[#22C55E] text-sm font-bold">{health?.uptime}</span>
                     </div>
                     <p className="text-[11px] text-slate-500">وقت التشغيل للخادم</p>
                     <div className="w-full bg-slate-200 dark:bg-[#2a2a2a] h-1.5 rounded-full mt-3 overflow-hidden">
-                        <div className="bg-[#dba61f] h-1.5 rounded-full w-[99%]"></div>
+                        <div className="bg-[#22C55E] h-1.5 rounded-full w-[99%]"></div>
                     </div>
                 </div>
                 <div className="p-4 rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02]">
@@ -131,11 +131,11 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
                 <div className="p-4 rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/[0.02]">
                     <div className="flex justify-between items-center mb-1">
                         <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">معدل اكتمال الطلبات</h4>
-                        <span className="text-[#dba61f] text-sm font-bold">{health?.completionRate}%</span>
+                        <span className="text-[#22C55E] text-sm font-bold">{health?.completionRate}%</span>
                     </div>
                     <p className="text-[11px] text-slate-500">مقارنة بالمشاريع المسجلة</p>
                     <div className="w-full bg-slate-200 dark:bg-[#2a2a2a] h-1.5 rounded-full mt-3 overflow-hidden">
-                        <div className="bg-[#dba61f] h-1.5 rounded-full transition-all duration-1000" style={{ width: `${health?.completionRate || 0}%` }}></div>
+                        <div className="bg-[#22C55E] h-1.5 rounded-full transition-all duration-1000" style={{ width: `${health?.completionRate || 0}%` }}></div>
                     </div>
                 </div>
             </div>
@@ -156,10 +156,10 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
             <Head title="لوحة التحكم" />
 
             {/* Welcome Banner */}
-            <div className="bg-gradient-to-l from-[#dba61f] to-[#b38615] rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-[#dba61f]/20">
+            <div className="bg-gradient-to-l from-[#22C55E] to-[#b38615] rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-[#22C55E]/20">
                 <div className="relative z-10">
                     <h2 className="text-2xl font-bold text-white mb-2">نظرة عامة على النظام</h2>
-                    <p className="text-white/80 max-w-xl">مرحباً بك مجدداً، إليك آخر التحديثات لمشاريع الكرفانات.</p>
+                    <p className="text-white/80 max-w-xl">مرحباً بك مجدداً، إليك آخر التحديثات لمشاريع اللاندسكيب.</p>
                     <div className="mt-6 flex flex-wrap gap-4">
                         <Link href={route('admin.projects.index')} className="bg-black/20 hover:bg-black/30 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 backdrop-blur-sm">
                             <DynamicIcon name="add_circle" className="text-[20px]" />
@@ -224,7 +224,7 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
                 <div className="lg:col-span-2 bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/5 overflow-hidden">
                     <div className="p-6 border-b border-slate-200 dark:border-white/5 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[#dba61f]/10 text-[#dba61f] flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-lg bg-[#22C55E]/10 text-[#22C55E] flex items-center justify-center">
                                 <DynamicIcon name="list_alt" className="text-[18px]" />
                             </div>
                             <h3 className="text-base font-bold text-slate-900 dark:text-white">أحدث المشاريع المدرجة</h3>
@@ -248,7 +248,7 @@ export default function Dashboard({ unreadMessagesCount, pendingRequestsCount, t
                 {/* System Health */}
                 <div className="bg-white dark:bg-[#1a1a1a] rounded-2xl border border-slate-200 dark:border-white/5 p-6">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-8 rounded-lg bg-[#dba61f]/10 text-[#dba61f] flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-[#22C55E]/10 text-[#22C55E] flex items-center justify-center">
                             <DynamicIcon name="analytics" className="text-[18px]" />
                         </div>
                         <h3 className="text-base font-bold text-slate-900 dark:text-white">صحة النظام</h3>

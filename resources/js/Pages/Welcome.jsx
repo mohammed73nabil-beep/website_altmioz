@@ -189,7 +189,8 @@ export default function Welcome({ projects, siteContents, galleryImages = [], be
                         alt={`${pageContents?.['home.hero.title'] || 'نحوّل مساحتك إلى حديقة فاخرة'} — ${siteName}`}
                         className="w-full h-full object-cover"
                         src={getImageUrl('home.hero.image', "/images/hero-bg-2.jpg")}
-                        fetchpriority="high"
+                        fetchPriority="high"
+                        decoding="sync"
                         width="1920"
                         height="1080"
                     />
@@ -312,6 +313,10 @@ export default function Welcome({ projects, siteContents, galleryImages = [], be
                                             src={project.image_path ? `/storage/${project.image_path}` : (project.image_url?.startsWith('http') ? project.image_url : `/storage/${project.image_url}`)}
                                             alt={project.title}
                                             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                            loading="lazy"
+                                            decoding="async"
+                                            width="600"
+                                            height="460"
                                             onError={(e) => { e.target.onerror = null; e.target.src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD0JAHsObzIwnKDCWmYTUyAsR9C7WINbtHiv7-SNPFkwpvyHrGM42q9H2J-Ee7DLoDv4ZlMqlXqVtRvDB8vhp8nYJohCzmTUqr5HcXUp2SHaYN4S_QfhWu6bX_c7gpYGuWPRa3TtWsyF62L3fbjnXlfn_Kh-HQJS1zAnRNrpSODl5zr5LVSSkKw1K7FuK46TOtZOwKzrUUQO90P_O0bee6_wDBb7dO-38mIlKKEpPBEQdmTbOAymBm0rvhuCFlMrx_V9LhK3fdjmCeF'; }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
@@ -409,6 +414,9 @@ export default function Welcome({ projects, siteContents, galleryImages = [], be
                                         alt={img.alt_text || img.title || 'صورة أعمال'}
                                         className="w-full object-cover group-hover:scale-105 transition-transform duration-700"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="600"
+                                        height="400"
                                     />
                                     {img.title && (
                                         <div className="bg-white dark:bg-surface-dark px-3 py-2 text-sm text-gray-700 dark:text-gray-300 font-medium">
@@ -429,6 +437,10 @@ export default function Welcome({ projects, siteContents, galleryImages = [], be
                         src={getImageUrl('home.cta.background', "https://images.unsplash.com/photo-1541888086425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop")}
                         alt={`تواصل مع ${siteName} للحصول على عرض سعر`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        width="2070"
+                        height="1380"
                     />
                     <div className="absolute inset-0 bg-black/30"></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>

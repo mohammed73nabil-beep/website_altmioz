@@ -4,13 +4,31 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {{-- DNS prefetch + preconnect for faster font/icon loading (prevents FOUT/CLS) --}}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        {{-- Preconnect for Google Fonts & Icons (highest priority) --}}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
-        {{-- Prevent CLS from Material Symbols font loading --}}
+        {{-- Load Google Fonts asynchronously (non-render-blocking) --}}
+        <link rel="preload" as="style"
+              href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap"
+              onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+            <link rel="stylesheet"
+                  href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap">
+        </noscript>
+
+        {{-- Material Symbols: async load + font-display:swap to prevent render-blocking --}}
+        <link rel="preload" as="style"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+              onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+            <link rel="stylesheet"
+                  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+        </noscript>
+
+        {{-- Critical inline styles to prevent FOUT/CLS before fonts load --}}
         <style>
             @font-face {
                 font-family: 'Material Symbols Outlined';
@@ -18,10 +36,14 @@
                 font-display: swap;
             }
             .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined';
                 min-width: 1em;
                 min-height: 1em;
                 display: inline-block;
+                visibility: visible;
             }
+            /* Prevent invisible text flash while Almarai loads */
+            body { font-family: 'Almarai', 'Arial', sans-serif; }
         </style>
 
         {{-- Page title overridden per-page via Inertia <Head> --}}

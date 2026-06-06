@@ -269,6 +269,9 @@ export default function Navbar() {
                                 src={logoUrl}
                                 alt={siteName}
                                 className="h-8 max-w-[150px] object-contain transition-all duration-300"
+                                width="150"
+                                height="32"
+                                fetchPriority="high"
                             />
                         ) : (
                             <span className={`font-black text-[14px] truncate max-w-[170px] ${scrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>
@@ -313,6 +316,8 @@ export default function Navbar() {
                                 src={logoUrl}
                                 alt={siteName}
                                 className="h-8 max-w-[150px] object-contain"
+                                width="150"
+                                height="32"
                             />
                         ) : (
                             <span className="font-black text-gray-900 dark:text-white text-sm">{siteName}</span>
@@ -375,6 +380,9 @@ export default function Navbar() {
                                 src={logoUrl}
                                 alt={siteName}
                                 className="h-10 max-w-[200px] object-contain transition-all duration-300"
+                                width="200"
+                                height="40"
+                                fetchPriority="high"
                             />
                         ) : (
                             <span className={`font-black text-[15px] hidden lg:block ${scrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>

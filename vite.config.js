@@ -12,24 +12,42 @@ export default defineConfig({
     ],
     build: {
         cssMinify: true,
-        minify: 'esbuild', // Faster and built-in
+        minify: 'esbuild',
+        // Increase chunk size warning limit
+        chunkSizeWarningLimit: 1000,
         rollupOptions: {
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
-                        // Group only the heavy, non-critical admin libraries
+                        // Heavy admin-only libraries — never loaded on public pages
                         if (id.includes('react-quill') || id.includes('quill')) return 'admin-editor';
-                        if (id.includes('framer-motion')) return 'framer-motion';
                         if (id.includes('@hello-pangea/dnd')) return 'admin-dnd';
-                        
-                        // Keep everything else in the main vendor chunk or let Vite split it
+
+                        // Framer-motion — large, only used in specific pages
+                        if (id.includes('framer-motion')) return 'framer-motion';
+
+                        // React core — always needed, cache separately
+                        if (id.includes('react-dom')) return 'react-dom';
+                        if (id.includes('react/') || id.includes('/react.')) return 'react-core';
+
+                        // Inertia — framework core
+                        if (id.includes('@inertiajs')) return 'inertia';
+
+                        // Everything else in shared vendor
                         return 'vendor';
                     }
                 },
+                // Improve caching with content hashes
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash].[ext]',
             },
         },
     },
     esbuild: {
         drop: ['console', 'debugger'],
+        // Remove dead code more aggressively
+        treeShaking: true,
     }
 });
+

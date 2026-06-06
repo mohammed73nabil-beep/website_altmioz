@@ -7,6 +7,7 @@
 
 ---
 
+
 ## من أنا
 مهندس برمجيات ومهندس ذكاء اصطناعي مختص بتصميم ونشر حلول تعتمد على نماذج اللغة الكبيرة (Large Language Models) وخدمات Azure OpenAI. أعمل على تحويل الاحتياجات التجارية إلى أنظمة ذكية يمكنها التعلّم والتكيف وتحسين المنتج باستمرار.
 
@@ -171,3 +172,5 @@ print(response.choices[0].message.content)
 - x: [@mohammed.73.nabil](https://x.com/mohammed.73.nabil)
 
 
+#   w e b s i t e _ a l t m i o z  
+ 

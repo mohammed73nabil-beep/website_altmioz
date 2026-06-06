@@ -8,13 +8,6 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 
-/**
- * Centralised image optimisation helper.
- *
- * Converts any uploaded image to WebP, resizes it if it exceeds the given
- * maximum dimensions, and saves it to the public disk.  Returns the relative
- * path (e.g. "gallery/abc123.webp") that can be stored in the database.
- */
 class ImageOptimizer
 {
     /**
@@ -33,8 +26,9 @@ class ImageOptimizer
         string $directory,
         int $maxWidth  = 1280,
         int $maxHeight = 720,
-        int $quality   = 65,
-        ?string $oldPath = null
+        int $quality   = 80,
+        ?string $oldPath = null,
+        ?string $customName = null
     ): string {
         // Delete previous file if supplied
         if ($oldPath) {
@@ -42,7 +36,16 @@ class ImageOptimizer
         }
 
         // Build a unique filename
-        $filename  = Str::uuid() . '.webp';
+        if ($customName) {
+            $slug = Str::slug($customName);
+            if (empty($slug)) {
+                $filename = Str::uuid() . '.webp';
+            } else {
+                $filename = substr($slug, 0, 100) . '-' . Str::random(6) . '.webp';
+            }
+        } else {
+            $filename  = Str::uuid() . '.webp';
+        }
         $storagePath = $directory . '/' . $filename;
         $fullPath    = Storage::disk('public')->path($storagePath);
 
@@ -73,6 +76,6 @@ class ImageOptimizer
         UploadedFile $file,
         ?string $oldPath = null
     ): string {
-        return self::storeAsWebP($file, 'avatars', 720, 720, 65, $oldPath);
+        return self::storeAsWebP($file, 'avatars', 720, 720, 80, $oldPath);
     }
 }

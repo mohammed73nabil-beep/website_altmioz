@@ -36,7 +36,7 @@ const convertToWebP = (file) =>
                     { type: 'image/webp', lastModified: Date.now() }
                 );
                 resolve({ file: webpFile, originalKB, compressedKB });
-            }, 'image/webp', 0.85);
+            }, 'image/webp', 0.18);
         };
 
         img.onerror = () => {
@@ -146,7 +146,7 @@ export default function GalleryIndex({ pages = {}, selectedPage, images = [] }) 
     // ── Helpers ───────────────────────────────────────────────────────────────
     const CompressionBadge = ({ info }) =>
         info ? (
-            <div className="mt-2 flex items-center gap-2 text-xs bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg px-3 py-2">
+            <div className="mt-2 flex items-center gap-2 text-xs bg-primary/10 text-primary dark:text-primary border border-primary/20 rounded-lg px-3 py-2">
                 <span className="material-symbols-outlined text-[16px]">check_circle</span>
                 <span>
                     تم التحويل إلى <strong>WebP</strong> ✅ &nbsp;|&nbsp;
@@ -185,7 +185,7 @@ export default function GalleryIndex({ pages = {}, selectedPage, images = [] }) 
                                 <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-3 mb-2">صور الأعمال</h2>
                                 <p className="text-sm text-slate-500 dark:text-slate-400">اختر الصفحة التي تريد إدارة صور أعمالها.</p>
                             </div>
-                            <a href={route('admin.before-after.index')} className="bg-[#22C55E] text-[#0a0a0a] hover:bg-[#22C55E]/90 font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2 w-fit">
+                            <a href={route('admin.before-after.index')} className="bg-[#C5A059] text-[#0a0a0a] hover:bg-[#C5A059]/90 font-bold px-6 py-3 rounded-xl shadow-lg transition-all flex items-center gap-2 w-fit">
                                 <span className="material-symbols-outlined text-[20px]">compare</span>
                                 إدارة صور قبل وبعد
                             </a>
@@ -335,9 +335,10 @@ export default function GalleryIndex({ pages = {}, selectedPage, images = [] }) 
                                                 <span className="material-symbols-outlined text-[18px]">delete</span>
                                             </button>
                                         </div>
-                                        {img.title && (
-                                            <div className="px-2 py-1.5 bg-white dark:bg-sidebar-dark">
-                                                <p className="text-xs text-slate-600 dark:text-slate-400 truncate">{img.title}</p>
+                                        {(img.title || img.alt_text) && (
+                                            <div className="px-2 py-1.5 bg-white dark:bg-sidebar-dark border-t border-slate-100 dark:border-white/5">
+                                                {img.title && <p className="text-xs text-slate-700 dark:text-slate-300 font-bold truncate">{img.title}</p>}
+                                                {img.alt_text && <p className="text-[10px] text-slate-400 font-mono truncate" dir="ltr">{img.alt_text}</p>}
                                             </div>
                                         )}
                                     </div>

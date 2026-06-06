@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BackgroundController;
 use App\Http\Controllers\Admin\ProjectRequestController;
-use App\Http\Controllers\Admin\SiteContentController;
 use App\Http\Controllers\PublicProjectController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
@@ -62,60 +61,7 @@ Route::get('/services', function () {
     ]);
 })->name('services.index');
 
-Route::get('/services/landscaping', function () {
-    // Fix #5: cache contents + gallery per page with 10-min TTL
-    $contents = Cache::remember('page_contents_landscaping', 600, function () {
-        return \App\Models\Content::where('page', 'تنسيق الحدائق')->get();
-    });
-    return Inertia::render('Public/Services/Landscaping', [
-        'projects'          => Cache::remember('projects_landscaping', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%حدائق%')
-                ->orWhere('title', 'like', '%حدائق%')
-                ->latest()->take(4)->get()
-        ),
-        'pageContents'      => $contents->pluck('value', 'key'),
-        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_landscaping', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'landscaping')->orderBy('order')->get()
-        ),
-    ]);
-})->name('services.landscaping');
-
-Route::get('/services/design', function () {
-    $contents = Cache::remember('page_contents_design', 600, function () {
-        return \App\Models\Content::where('page', 'تصميم الحدائق')->get();
-    });
-    return Inertia::render('Public/Services/Design', [
-        'projects'          => Cache::remember('projects_design', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%تصميم%')
-                ->orWhere('title', 'like', '%تصميم%')
-                ->latest()->take(4)->get()
-        ),
-        'pageContents'      => $contents->pluck('value', 'key'),
-        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_design', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'design')->orderBy('order')->get()
-        ),
-    ]);
-})->name('services.design');
-
-Route::get('/services/artificial-grass', function () {
-    $contents = Cache::remember('page_contents_artificial_grass', 600, function () {
-        return \App\Models\Content::where('page', 'العشب الصناعي')->get();
-    });
-    return Inertia::render('Public/Services/ArtificialGrass', [
-        'projects'          => Cache::remember('projects_artificial_grass', 600, fn () =>
-            \App\Models\Project::where('category', 'like', '%عشب%')
-                ->orWhere('title', 'like', '%عشب%')
-                ->latest()->take(4)->get()
-        ),
-        'pageContents'      => $contents->pluck('value', 'key'),
-        'pageContentExtras' => $contents->pluck('extra_value', 'key'),
-        'galleryImages'     => Cache::remember('gallery_page_artificial_grass', 600, fn () =>
-            \App\Models\GalleryImage::where('page', 'artificial_grass')->orderBy('order')->get()
-        ),
-    ]);
-})->name('services.artificial-grass');
+Route::get('/services/{slug}', [\App\Http\Controllers\PublicServiceController::class, 'show'])->name('services.show');
 Route::get('/about-us', function () {
     return Inertia::render('Public/About/Index');
 })->name('about');
@@ -129,12 +75,6 @@ Route::get('/blog/{post:slug}', [BlogController::class, 'show'])->name('blog.sho
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Content Manager (CMS V3)
-    Route::get('/contents', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('contents.index');
-    Route::post('/contents', [\App\Http\Controllers\Admin\ContentController::class, 'store'])->name('contents.store');
-    Route::post('/contents/bulk-update/{page}', [\App\Http\Controllers\Admin\ContentController::class, 'bulkUpdate'])->name('contents.bulk-update');
-    Route::post('/contents/{content}', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('contents.update');
-    Route::delete('/contents/{content}', [\App\Http\Controllers\Admin\ContentController::class, 'destroy'])->name('contents.destroy');
 
     // Site Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
@@ -173,13 +113,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/project-requests/{projectRequest}/status', [ProjectRequestController::class, 'updateStatus'])->name('project-requests.status');
     Route::delete('/project-requests/{projectRequest}', [ProjectRequestController::class, 'destroy'])->name('project-requests.destroy');
 
-    Route::get('/content', [SiteContentController::class, 'index'])->name('content.index');
-    Route::post('/content', [SiteContentController::class, 'store'])->name('content.store');
-    Route::delete('/content/{siteContent}', [SiteContentController::class, 'destroy'])->name('content.destroy');
 
     // Home Video Management
     Route::get('/home-video', [\App\Http\Controllers\Admin\HomeVideoController::class, 'index'])->name('home-video.index');
     Route::post('/home-video', [\App\Http\Controllers\Admin\HomeVideoController::class, 'update'])->name('home-video.update');
+    Route::delete('/home-video/thumbnail', [\App\Http\Controllers\Admin\HomeVideoController::class, 'deleteThumbnail'])->name('home-video.thumbnail.delete');
+    Route::delete('/home-video/file', [\App\Http\Controllers\Admin\HomeVideoController::class, 'deleteVideoFile'])->name('home-video.file.delete');
 });
 
 Route::get('/dashboard', function () {

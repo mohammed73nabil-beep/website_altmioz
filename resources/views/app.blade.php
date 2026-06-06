@@ -25,7 +25,21 @@
         </style>
 
         {{-- Page title overridden per-page via Inertia <Head> --}}
-        <title inertia>حدائق سار</title>
+        <title inertia> مظلات وسواتر التميز</title>
+
+        {{-- Canonical (default) --}}
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        {{-- Basic JSON-LD Organization (extend per page if needed) --}}
+        <script type="application/ld+json">
+            {
+                "\u0040context": "https://schema.org",
+                "@type": "Organization",
+                "name": "{{ config('app.name') }}",
+                "url": "{{ rtrim(config('app.url'), '/') }}",
+                "logo": "{{ asset('images/logo.png') }}"
+            }
+        </script>
 
         {{-- Scripts --}}
         @routes

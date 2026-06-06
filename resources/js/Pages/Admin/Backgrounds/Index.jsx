@@ -96,7 +96,7 @@ export default function BackgroundsIndex({ backgroundPages = {} }) {
                 const reader = new FileReader();
                 reader.onloadend = () => setImagePreview(reader.result);
                 reader.readAsDataURL(finalFile);
-            }, 'image/webp', 0.50);
+            }, 'image/webp', 0.18);
         };
 
         img.onerror = () => {
@@ -258,7 +258,7 @@ export default function BackgroundsIndex({ backgroundPages = {} }) {
                             {compressionInfo && (
                                 <div className={`mt-2 flex items-center gap-2 text-xs rounded-lg px-3 py-2 border ${
                                     compressionInfo.saved
-                                        ? 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20'
+                                        ? 'bg-primary/10 text-primary dark:text-primary border-primary/20'
                                         : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
                                 }`}>
                                     <span className="material-symbols-outlined text-[16px]">

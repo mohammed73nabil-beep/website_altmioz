@@ -19,6 +19,7 @@ class GalleryImage extends Model
     protected $fillable = [
         'page',
         'title',
+        'alt_text',
         'image_path',
         'order',
     ];

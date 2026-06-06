@@ -27,14 +27,14 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Log in" />
 
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="mb-4 text-sm font-medium text-primary">
                     {status}
                 </div>
             )}
 
             <div className="login-center">
                 <form onSubmit={submit} className="form" noValidate>
-                    <h2 id="heading">اهلا أبوطارق   </h2>
+                    <h2 id="heading">اهلا بك في لوحة تحكم الموقع    </h2>
 
                     <div className="field">
                         <svg className="input-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>

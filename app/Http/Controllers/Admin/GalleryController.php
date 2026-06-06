@@ -11,14 +11,26 @@ use Inertia\Inertia;
 
 class GalleryController extends Controller
 {
-    // Pages available for gallery management
-    private const PAGES = [
-        'home'             => 'الصفحة الرئيسية',
-        'landscaping'      => 'تنسيق الحدائق',
-        'artificial_grass' => 'العشب الصناعي',
-        'water_features'   => 'نوافير وشلالات',
-        'pergolas'         => 'مظلات وجلسات',
-    ];
+    /**
+     * Get dynamic pages for the gallery.
+     */
+    private function getPages()
+    {
+        $basePages = [
+            'home'     => 'الرئيسية',
+            'services' => 'الخدمات',
+            'blog'     => 'المدونة',
+            'projects' => 'مشاريعنا',
+            'about'    => 'من نحن',
+            'contact'  => 'اتصل بنا',
+        ];
+
+        $servicePages = collect(config('services_list'))->mapWithKeys(function ($service) {
+            return [$service['slug'] => $service['title']];
+        })->toArray();
+
+        return array_merge($basePages, $servicePages);
+    }
 
     /**
      * Show page selector or list images for a specific page.
@@ -26,7 +38,7 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         $page   = $request->query('page');
-        $pages  = self::PAGES;
+        $pages  = $this->getPages();
         $images = [];
 
         if ($page && array_key_exists($page, $pages)) {
@@ -48,7 +60,7 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'page'       => ['required', 'string', 'in:' . implode(',', array_keys(self::PAGES))],
+            'page'       => ['required', 'string', 'in:' . implode(',', array_keys($this->getPages()))],
             'image'      => ['required', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
             'title'      => ['nullable', 'string', 'max:255'],
         ]);
@@ -59,12 +71,25 @@ class GalleryController extends Controller
             return back()->withErrors(['image' => 'عذراً، لا يمكن إضافة أكثر من 20 صورة لهذا القسم. الرجاء حذف بعض الصور القديمة أولاً.']);
         }
 
+        // Automatically translate title to English for SEO naming and alt text
+        $altText = null;
+        if (!empty($request->title)) {
+            $altText = \App\Helpers\TranslationHelper::translateArabicToEnglish($request->title);
+        }
+
         // Convert to WebP and store (max 1280×720, quality 65)
-        $path = ImageOptimizer::storeAsWebP($request->file('image'), 'gallery');
+        $path = ImageOptimizer::storeAsWebP(
+            $request->file('image'),
+            'gallery',
+            1280, 720, 65,
+            null,
+            $altText
+        );
 
         GalleryImage::create([
             'page'       => $request->page,
             'title'      => $request->title,
+            'alt_text'   => $altText,
             'image_path' => $path,
             'order'      => GalleryImage::where('page', $request->page)->max('order') + 1,
         ]);
@@ -82,17 +107,25 @@ class GalleryController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
         ]);
 
+        // Automatically translate title to English for SEO naming and alt text
+        $altText = $gallery->alt_text;
+        if ($request->has('title')) {
+            $altText = \App\Helpers\TranslationHelper::translateArabicToEnglish($request->title);
+        }
+
         if ($request->hasFile('image')) {
             // Convert new image to WebP, delete old file automatically
             $gallery->image_path = ImageOptimizer::storeAsWebP(
                 $request->file('image'),
                 'gallery',
                 1280, 720, 65,
-                $gallery->image_path  // old path — deleted inside helper
+                $gallery->image_path,  // old path — deleted inside helper
+                $altText
             );
         }
 
         $gallery->title = $request->title;
+        $gallery->alt_text = $altText;
         $gallery->save();
 
         return back()->with('success', 'تم تعديل الصورة بنجاح.');

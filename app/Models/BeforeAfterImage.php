@@ -15,6 +15,7 @@ class BeforeAfterImage extends Model
 
     protected $fillable = [
         'title',
+        'alt_text',
         'before_image_path',
         'after_image_path',
         'order',

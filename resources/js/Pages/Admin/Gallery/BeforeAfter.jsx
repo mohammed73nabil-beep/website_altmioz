@@ -36,7 +36,7 @@ const convertToWebP = (file) =>
                     { type: 'image/webp', lastModified: Date.now() }
                 );
                 resolve({ file: webpFile, originalKB, compressedKB });
-            }, 'image/webp', 0.85);
+            }, 'image/webp', 0.18);
         };
 
         img.onerror = () => {
@@ -61,7 +61,7 @@ export default function BeforeAfterIndex({ images = [] }) {
 
     const CompressionBadge = ({ info }) =>
         info ? (
-            <div className="mt-2 flex items-center gap-2 text-[10px] sm:text-xs bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 rounded-lg px-2 py-1.5 w-full">
+            <div className="mt-2 flex items-center gap-2 text-[10px] sm:text-xs bg-primary/10 text-primary dark:text-primary border border-primary/20 rounded-lg px-2 py-1.5 w-full">
                 <span className="material-symbols-outlined text-[14px] shrink-0">check_circle</span>
                 <span className="truncate">
                     WebP ✅ | {info.originalKB}KB → {info.compressedKB}KB
@@ -165,7 +165,7 @@ export default function BeforeAfterIndex({ images = [] }) {
                     <span className="material-symbols-outlined text-slate-400">compare</span>
                     <span className="font-semibold text-slate-700 dark:text-slate-200">صور الأعمال</span>
                     <span className="text-slate-400">/</span>
-                    <span className="text-[#22C55E] font-bold">مقارنة قبل وبعد</span>
+                    <span className="text-[#C5A059] font-bold">مقارنة قبل وبعد</span>
                 </div>
             }
         >
@@ -175,7 +175,7 @@ export default function BeforeAfterIndex({ images = [] }) {
                 <div className="flex items-center gap-4">
                     <a
                         href={route('admin.gallery.index')}
-                        className="flex items-center gap-2 text-sm text-slate-500 hover:text-[#22C55E] transition-colors"
+                        className="flex items-center gap-2 text-sm text-slate-500 hover:text-[#C5A059] transition-colors"
                     >
                         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                         العودة لصور الأعمال
@@ -186,7 +186,7 @@ export default function BeforeAfterIndex({ images = [] }) {
                 <div className="bg-white dark:bg-sidebar-dark rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm overflow-hidden">
                     <div className="px-6 py-4 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/5">
                         <h3 className="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[#22C55E] text-[20px]">add_photo_alternate</span>
+                            <span className="material-symbols-outlined text-[#C5A059] text-[20px]">add_photo_alternate</span>
                             إضافة مقارنة جديدة
                         </h3>
                     </div>
@@ -251,12 +251,12 @@ export default function BeforeAfterIndex({ images = [] }) {
                                 value={addForm.data.title}
                                 onChange={e => addForm.setData('title', e.target.value)}
                                 placeholder="مثال: حديقة منزل - الرياض"
-                                className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#22C55E]/40"
+                                className="w-full rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-800 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5A059]/40"
                             />
                         </div>
 
                         <div className="flex justify-end">
-                            <PrimaryButton disabled={addForm.processing || !addForm.data.before_image || !addForm.data.after_image} className="flex items-center gap-2 bg-[#22C55E] text-[#0a0a0a]">
+                            <PrimaryButton disabled={addForm.processing || !addForm.data.before_image || !addForm.data.after_image} className="flex items-center gap-2 bg-[#C5A059] text-[#0a0a0a]">
                                 {addForm.processing ? (
                                     <><span className="material-symbols-outlined animate-spin text-sm">sync</span>جاري الرفع...</>
                                 ) : (
@@ -271,9 +271,9 @@ export default function BeforeAfterIndex({ images = [] }) {
                 <div className="bg-white dark:bg-sidebar-dark rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm overflow-hidden">
                     <div className="px-6 py-4 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/5 flex justify-between items-center">
                         <h3 className="text-base font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[#22C55E] text-[20px]">collections</span>
+                            <span className="material-symbols-outlined text-[#C5A059] text-[20px]">collections</span>
                             المقارنات المضافة
-                            <span className="bg-[#22C55E]/10 text-[#22C55E] px-2 py-0.5 rounded-full text-xs font-bold">{images.length}</span>
+                            <span className="bg-[#C5A059]/10 text-[#C5A059] px-2 py-0.5 rounded-full text-xs font-bold">{images.length}</span>
                         </h3>
                     </div>
 
@@ -291,17 +291,20 @@ export default function BeforeAfterIndex({ images = [] }) {
                                             <img src={`/storage/${img.before_image_path}`} className="w-full h-full object-cover" alt="Before" />
                                             <span className="absolute top-2 right-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded">قبل</span>
                                         </div>
-                                        <div className="w-1/2 h-full relative border-r-2 border-[#22C55E]">
+                                        <div className="w-1/2 h-full relative border-r-2 border-[#C5A059]">
                                             <img src={`/storage/${img.after_image_path}`} className="w-full h-full object-cover" alt="After" />
-                                            <span className="absolute top-2 left-2 bg-[#22C55E] text-black text-[10px] px-2 py-1 rounded">بعد</span>
+                                            <span className="absolute top-2 left-2 bg-[#C5A059] text-black text-[10px] px-2 py-1 rounded">بعد</span>
                                         </div>
                                     </div>
-                                    <div className="px-4 py-3 bg-white dark:bg-sidebar-dark flex justify-between items-center">
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{img.title || 'بدون وصف'}</p>
-                                        <div className="flex gap-2">
-                                            <button onClick={() => openEdit(img)} className="text-blue-500 hover:text-blue-600 bg-blue-50 dark:bg-blue-500/10 p-1.5 rounded-lg"><span className="material-symbols-outlined text-[16px]">edit</span></button>
-                                            <button onClick={() => setDeleteTarget(img)} className="text-red-500 hover:text-red-600 bg-red-50 dark:bg-red-500/10 p-1.5 rounded-lg"><span className="material-symbols-outlined text-[16px]">delete</span></button>
+                                    <div className="px-4 py-3 bg-white dark:bg-sidebar-dark flex flex-col justify-center border-t border-slate-100 dark:border-white/5">
+                                        <div className="flex justify-between items-center w-full">
+                                            <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{img.title || 'بدون وصف'}</p>
+                                            <div className="flex gap-2 shrink-0">
+                                                <button onClick={() => openEdit(img)} className="text-blue-500 hover:text-blue-600 bg-blue-50 dark:bg-blue-500/10 p-1.5 rounded-lg"><span className="material-symbols-outlined text-[16px]">edit</span></button>
+                                                <button onClick={() => setDeleteTarget(img)} className="text-red-500 hover:text-red-600 bg-red-50 dark:bg-red-500/10 p-1.5 rounded-lg"><span className="material-symbols-outlined text-[16px]">delete</span></button>
+                                            </div>
                                         </div>
+                                        {img.alt_text && <p className="text-[10px] text-slate-400 font-mono truncate mt-1 w-full" dir="ltr">{img.alt_text}</p>}
                                     </div>
                                 </div>
                             ))}
@@ -352,7 +355,7 @@ export default function BeforeAfterIndex({ images = [] }) {
 
                     <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 dark:border-white/10 pt-4">
                         <SecondaryButton type="button" onClick={() => setEditingImage(null)}>إلغاء</SecondaryButton>
-                        <PrimaryButton disabled={editForm.processing} className="bg-[#22C55E] text-[#0a0a0a]">{editForm.processing ? 'جاري الحفظ...' : 'حفظ التعديلات'}</PrimaryButton>
+                        <PrimaryButton disabled={editForm.processing} className="bg-[#C5A059] text-[#0a0a0a]">{editForm.processing ? 'جاري الحفظ...' : 'حفظ التعديلات'}</PrimaryButton>
                     </div>
                 </form>
             </Modal>

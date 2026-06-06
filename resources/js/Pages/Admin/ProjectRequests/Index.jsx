@@ -28,7 +28,7 @@ export default function ProjectRequestsIndex({ requests = { data: [] } }) {
         const styles = {
             pending: 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20',
             reviewed: 'bg-blue-500/10 text-blue-500 border border-blue-500/20',
-            accepted: 'bg-green-500/10 text-green-500 border border-green-500/20',
+            accepted: 'bg-primary/10 text-primary border border-primary/20',
             rejected: 'bg-red-500/10 text-red-500 border border-red-500/20',
         };
         const labels = {
@@ -238,7 +238,7 @@ export default function ProjectRequestsIndex({ requests = { data: [] } }) {
                                     updateStatus(selectedRequest.id, 'accepted');
                                     setSelectedRequest({ ...selectedRequest, status: 'accepted' });
                                 }}
-                                className="flex-1 bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition-all flex items-center justify-center gap-2"
+                                className="flex-1 bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary transition-all flex items-center justify-center gap-2"
                             >
                                 <span className="material-symbols-outlined text-[18px]">check_circle</span>
                                 قبول مبدئي

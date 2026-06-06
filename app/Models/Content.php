@@ -10,7 +10,14 @@ class Content extends Model
 {
     use HasFactory, \App\Traits\HasMediaCleanup;
 
-    protected array $mediaColumns = ['value'];
+    /**
+     * Resolve media columns dynamically.
+     * We only clean up media files if the content type is an image.
+     */
+    public function resolveMediaColumns(): array
+    {
+        return $this->type === 'image' ? ['value'] : [];
+    }
 
     protected $fillable = [
         'page',

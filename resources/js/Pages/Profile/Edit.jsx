@@ -89,7 +89,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
         return s;
     })();
     const strengthLabel = ['', 'ضعيفة', 'مقبولة', 'جيدة', 'قوية'][strength];
-    const strengthColor = ['', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'][strength];
+    const strengthColor = ['', 'bg-red-500', 'bg-yellow-500', 'bg-blue-500', 'bg-primary'][strength];
 
     // ── Avatar upload state─────────────────────────────────────────────────────
     const avatarInputRef = useRef();
@@ -152,7 +152,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                     {/* Profile Card */}
                     <div className="bg-white dark:bg-sidebar-dark rounded-2xl border border-slate-100 dark:border-white/5 shadow-sm overflow-hidden">
                         {/* Cover gradient */}
-                        <div className="h-28 bg-gradient-to-br from-[#064E3B] via-[#1a3a5c] to-[#064E3B] relative overflow-hidden">
+                        <div className="h-28 bg-gradient-to-br from-surface-dark via-[#1a3a5c] to-surface-dark relative overflow-hidden">
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(201,162,39,0.3),_transparent_60%)]"></div>
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/micro-carbon.png')] opacity-20"></div>
                         </div>
@@ -162,7 +162,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                             <div className="-mt-12 flex flex-col items-center px-6 pb-4">
                                 {/* Avatar circle - click to pick */}
                                 <div className="relative group cursor-pointer" onClick={() => avatarInputRef.current?.click()}>
-                                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white dark:border-sidebar-dark shadow-xl bg-gradient-to-br from-[#16A34A] to-[#4ADE80] flex items-center justify-center text-[#064E3B] font-black text-3xl">
+                                    <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white dark:border-sidebar-dark shadow-xl bg-gradient-to-br from-primary to-[#D4AF37] flex items-center justify-center text-slate-900 font-black text-3xl">
                                         {avatarSrc ? (
                                             <img src={avatarSrc} alt="avatar" className="w-full h-full object-cover" />
                                         ) : (
@@ -175,7 +175,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                                     </div>
                                     {/* Green dot indicator if has avatar */}
                                     {(avatarSrc) && (
-                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 border-2 border-white dark:border-sidebar-dark flex items-center justify-center">
+                                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary border-2 border-white dark:border-sidebar-dark flex items-center justify-center">
                                             <span className="material-symbols-outlined text-white text-[10px]">check</span>
                                         </div>
                                     )}
@@ -253,8 +253,8 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                                     <span className="material-symbols-outlined text-[16px]">verified_user</span>
                                     حالة الحساب
                                 </span>
-                                <span className="font-bold text-green-600 dark:text-green-400 text-xs flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                                <span className="font-bold text-primary dark:text-primary text-xs flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
                                     نشط
                                 </span>
                             </div>
@@ -263,7 +263,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                                     <span className="material-symbols-outlined text-[16px]">security</span>
                                     التحقق بالبريد
                                 </span>
-                                <span className={`font-bold text-xs ${user.email_verified_at ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                                <span className={`font-bold text-xs ${user.email_verified_at ? 'text-primary dark:text-primary' : 'text-amber-600 dark:text-amber-400'}`}>
                                     {user.email_verified_at ? 'مُفعَّل' : 'غير مُفعَّل'}
                                 </span>
                             </div>
@@ -336,7 +336,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                             )}
 
                             {status === 'verification-link-sent' && (
-                                <div className="text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-xl p-3 flex items-center gap-2">
+                                <div className="text-sm text-primary dark:text-primary bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/20 rounded-xl p-3 flex items-center gap-2">
                                     <span className="material-symbols-outlined text-[18px]">check_circle</span>
                                     تم إرسال رابط التفعيل إلى بريدك الإلكتروني.
                                 </div>
@@ -425,7 +425,7 @@ export default function ProfileEdit({ mustVerifyEmail, status }) {
                                 <div>
                                     <div className="flex justify-between text-xs mb-1.5">
                                         <span className="text-slate-500">قوة كلمة المرور</span>
-                                        <span className={`font-bold ${strength >= 3 ? 'text-green-600' : strength === 2 ? 'text-blue-600' : 'text-red-500'}`}>{strengthLabel}</span>
+                                        <span className={`font-bold ${strength >= 3 ? 'text-primary' : strength === 2 ? 'text-blue-600' : 'text-red-500'}`}>{strengthLabel}</span>
                                     </div>
                                     <div className="flex gap-1">
                                         {[1, 2, 3, 4].map(i => (

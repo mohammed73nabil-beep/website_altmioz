@@ -3,7 +3,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, router } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 
-export default function ProjectsIndex({ projects = [] }) {
+export default function ProjectsIndex({ projects = [], categories = [] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState(null);
     const projectsArray = Array.isArray(projects) ? projects : (projects?.data || []);
@@ -13,10 +13,9 @@ export default function ProjectsIndex({ projects = [] }) {
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         title_ar: '',
         title_en: '',
-        category: '',
+        category: categories.length > 0 ? categories[0] : '',
         description_ar: '',
         status: 'In Progress',
-        image_before: null,
         image_after: null,
     });
 
@@ -33,10 +32,9 @@ export default function ProjectsIndex({ projects = [] }) {
         setData({
             title_ar: project.title_ar || project.title_en || project.title || '',
             title_en: project.title_en || '',
-            category: project.category || '',
+            category: project.category || (categories.length > 0 ? categories[0] : ''),
             description_ar: project.description_ar || project.description || '',
             status: project.status || 'In Progress',
-            image_before: null,
             image_after: null,
         });
         setIsModalOpen(true);
@@ -141,7 +139,7 @@ export default function ProjectsIndex({ projects = [] }) {
                                             {project.category}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={`inline-flex px-2.5 py-1 rounded-md text-[10px] font-bold ${project.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'
+                                            <span className={`inline-flex px-2.5 py-1 rounded-md text-[10px] font-bold ${project.status === 'Completed' ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'
                                                 }`}>
                                                 {project.status === 'Completed' ? 'مكتمل' : 'قيد التنفيذ'}
                                             </span>
@@ -232,16 +230,22 @@ export default function ProjectsIndex({ projects = [] }) {
                                         {errors.title_ar && <span className="text-red-500 text-xs mt-1">{errors.title_ar}</span>}
                                     </div>
 
-                                    {/* Caravan Type */}
+                                    {/* Category Type */}
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">نوع اللاندسكيب / الحديقة <span className="text-red-500">*</span></label>
-                                        <input
-                                            type="text"
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">القسم <span className="text-red-500">*</span></label>
+                                        <select
                                             value={data.category}
                                             onChange={e => setData('category', e.target.value)}
                                             className="w-full px-4 py-2.5 bg-slate-100 dark:bg-white/5 border-transparent focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-sm transition-all dark:text-white"
-                                            placeholder="مثال: تصميم حدائق، شلالات، عشب صناعي..."
-                                        />
+                                        >
+                                            {categories.map((cat, idx) => (
+                                                <option key={idx} value={cat}>{cat}</option>
+                                            ))}
+                                            {/* Fallback for existing items that aren't in categories */}
+                                            {data.category && !categories.includes(data.category) && (
+                                                <option value={data.category}>{data.category}</option>
+                                            )}
+                                        </select>
                                         {errors.category && <span className="text-red-500 text-xs mt-1">{errors.category}</span>}
                                     </div>
                                 </div>
@@ -262,24 +266,14 @@ export default function ProjectsIndex({ projects = [] }) {
                                 </div>
 
                                 {/* Images */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 border-t border-slate-200 dark:border-white/5">
+                                <div className="grid grid-cols-1 pt-2 border-t border-slate-200 dark:border-white/5">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">صورة (قبل)</label>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={e => setData('image_before', e.target.files[0])}
-                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
-                                        />
-                                        <p className="text-[10px] text-slate-500 mt-1">اختياري: يعرض للعملاء كيفية تطوير الحديقة. {editingProject && "دعه فارغاً للإبقاء على الصورة الحالية"}</p>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">صورة (بعد) {!editingProject && <span className="text-red-500">*</span>}</label>
+                                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">صورة المشروع {!editingProject && <span className="text-red-500">*</span>}</label>
                                         <input
                                             type="file"
                                             accept="image/*"
                                             onChange={e => setData('image_after', e.target.files[0])}
-                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
+                                            className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#C5A059]/10 file:text-[#C5A059] hover:file:bg-[#C5A059]/20 cursor-pointer"
                                         />
                                         <p className="text-[10px] text-slate-500 mt-1">الصورة النهائية للمشروع والتي ستكون البانر. {editingProject && "دعه فارغاً للإبقاء على الصورة الحالية"}</p>
                                     </div>

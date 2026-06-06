@@ -23,20 +23,28 @@ class SitemapController extends Controller
     {
         $sitemapXml = Cache::remember('sitemap_xml', 3600, function () {
             $baseUrl = rtrim(config('app.url'), '/');
-            $now     = now()->toAtomString();
+            $now = now()->toAtomString();
 
             // ——— الصفحات الثابتة ———
             $staticPages = [
-                ['url' => $baseUrl . '/',              'priority' => '1.0', 'changefreq' => 'weekly',  'lastmod' => $now],
-                ['url' => $baseUrl . '/services',      'priority' => '0.9', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/services/caravans',    'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/services/portacabins', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/services/buildings',   'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/about-us',      'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/contact-us',    'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $now],
-                ['url' => $baseUrl . '/our-projects',  'priority' => '0.8', 'changefreq' => 'weekly',  'lastmod' => $now],
-                ['url' => $baseUrl . '/blog',          'priority' => '0.7', 'changefreq' => 'weekly',  'lastmod' => $now],
+                ['url' => $baseUrl . '/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => $now],
+                ['url' => $baseUrl . '/services', 'priority' => '0.9', 'changefreq' => 'monthly', 'lastmod' => $now],
+                ['url' => $baseUrl . '/about-us', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => $now],
+                ['url' => $baseUrl . '/contact-us', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => $now],
+                ['url' => $baseUrl . '/our-projects', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => $now],
+                ['url' => $baseUrl . '/blog', 'priority' => '0.7', 'changefreq' => 'weekly', 'lastmod' => $now],
             ];
+
+            // ——— صفحات الخدمات الديناميكية ———
+            $servicesList = config('services_list') ?? [];
+            foreach (array_keys($servicesList) as $serviceSlug) {
+                $staticPages[] = [
+                    'url' => $baseUrl . '/services/' . $serviceSlug,
+                    'priority' => '0.8',
+                    'changefreq' => 'monthly',
+                    'lastmod' => $now
+                ];
+            }
 
             // ——— المشاريع الديناميكية ———
             $projects = Project::select('id', 'updated_at')->latest()->get();
@@ -48,7 +56,7 @@ class SitemapController extends Controller
                 ->get();
 
             // ——— بناء XML ———
-            $xml  = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+            $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
             $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
             $xml .= '        xmlns:xhtml="http://www.w3.org/1999/xhtml">' . "\n";
 
@@ -62,7 +70,7 @@ class SitemapController extends Controller
             }
 
             foreach ($projects as $project) {
-                $url     = $baseUrl . '/our-projects/' . $project->id;
+                $url = $baseUrl . '/our-projects/' . $project->id;
                 $lastmod = $project->updated_at?->toAtomString() ?? $now;
                 $xml .= "  <url>\n";
                 $xml .= "    <loc>{$url}</loc>\n";
@@ -73,7 +81,7 @@ class SitemapController extends Controller
             }
 
             foreach ($posts as $post) {
-                $url     = $baseUrl . '/blog/' . $post->slug;
+                $url = $baseUrl . '/blog/' . $post->slug;
                 $lastmod = $post->updated_at?->toAtomString() ?? $now;
                 $xml .= "  <url>\n";
                 $xml .= "    <loc>{$url}</loc>\n";
@@ -90,7 +98,6 @@ class SitemapController extends Controller
 
         return response($sitemapXml, 200, [
             'Content-Type' => 'application/xml; charset=UTF-8',
-            'X-Robots-Tag' => 'noindex',
         ]);
     }
 }

@@ -48,14 +48,25 @@ class SettingController extends Controller
             $setting->type = $settingData['type'];
             $setting->group = $settingData['group'];
 
-            if ($settingData['type'] === 'image' && $request->hasFile("settings.{$index}.file")) {
-                // Delete old file if exists
-                if ($setting->value) {
-                    Storage::disk('public')->delete($setting->value);
+            if ($settingData['type'] === 'image') {
+                if ($request->hasFile("settings.{$index}.file")) {
+                    $path = \App\Helpers\ImageOptimizer::storeAsWebP(
+                        $request->file("settings.{$index}.file"),
+                        'settings',
+                        1280, // maxWidth
+                        1280, // maxHeight
+                        90,   // quality (as requested)
+                        $setting->value
+                    );
+                    $setting->value = $path;
+                } elseif (empty($settingData['value'])) {
+                    // If image was cleared/deleted
+                    if ($setting->value) {
+                        Storage::disk('public')->delete($setting->value);
+                    }
+                    $setting->value = null;
                 }
-                $path = $request->file("settings.{$index}.file")->store('settings', 'public');
-                $setting->value = $path;
-            } elseif ($settingData['type'] !== 'image') {
+            } else {
                 $setting->value = $settingData['value'] ?? null;
             }
 

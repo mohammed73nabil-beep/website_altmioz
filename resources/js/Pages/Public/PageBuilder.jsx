@@ -9,7 +9,7 @@ import ContactForm from '@/Components/Blocks/ContactForm';
 export default function PageBuilder({ pageData }) {
     if (!pageData || !pageData.content) {
         return (
-            <div className="bg-[#f8f7f6] dark:bg-[#022C22] min-h-screen flex items-center justify-center text-gray-400">
+            <div className="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center text-gray-400">
                 <p>لا يوجد محتوى لعرضه.</p>
             </div>
         );
@@ -26,7 +26,7 @@ export default function PageBuilder({ pageData }) {
     };
 
     return (
-        <div className="bg-[#f8f7f6] dark:bg-[#022C22] min-h-screen text-gray-800 dark:text-gray-100 font-display selection:bg-[#16A34A] selection:text-[#064E3B]" dir="rtl" lang="ar" style={{ fontFamily: '"Almarai", "Manrope", sans-serif' }}>
+        <div className="bg-background-light dark:bg-background-dark min-h-screen text-gray-800 dark:text-gray-100 font-display selection:bg-primary selection:text-slate-900" dir="rtl" lang="ar" style={{ fontFamily: '"Almarai", "Manrope", sans-serif' }}>
             <Head>
                 <title>{pageData.meta_title?.ar || pageData.title?.ar || 'الموقع'}</title>
                 {pageData.meta_description?.ar && <meta name="description" content={pageData.meta_description.ar} />}
@@ -41,7 +41,7 @@ export default function PageBuilder({ pageData }) {
 
             <footer className="bg-[#040A12] py-8 border-t border-white/5 relative z-20 mt-auto">
                 <div className="max-w-7xl mx-auto px-4 text-center">
-                    <div className="text-2xl font-black text-white mb-4">حديقتي لاندسكيب</div>
+                    <div className="text-2xl font-black text-white mb-4">شركة مظلات التميز</div>
                     <p className="text-sm text-gray-500">© 2026 تم التطوير بواسطة محمد نبيل    .</p>
                 </div>
             </footer>

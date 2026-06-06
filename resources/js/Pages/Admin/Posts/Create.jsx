@@ -119,7 +119,7 @@ export default function PostCreate({ categories = [] }) {
                                 type="file"
                                 accept="image/*"
                                 onChange={e => setData('image', e.target.files[0])}
-                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#22C55E]/10 file:text-[#22C55E] hover:file:bg-[#22C55E]/20 cursor-pointer"
+                                className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-[#C5A059]/10 file:text-[#C5A059] hover:file:bg-[#C5A059]/20 cursor-pointer"
                             />
                             {errors.image && <span className="text-red-500 text-xs mt-1">{errors.image}</span>}
                         </div>

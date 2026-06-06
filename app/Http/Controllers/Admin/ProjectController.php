@@ -17,8 +17,13 @@ class ProjectController extends Controller
 {
     public function index()
     {
+        $categories = collect(config('services_list'))->map(function ($service) {
+            return $service['title'];
+        })->values()->toArray();
+
         return Inertia::render('Admin/Projects/Index', [
             'projects' => Project::latest()->paginate(20)->withQueryString(),
+            'categories' => $categories,
         ]);
     }
 
@@ -30,21 +35,16 @@ class ProjectController extends Controller
             'category'      => 'required|string|max:100',
             'description_ar' => 'nullable|string',
             'status'        => 'required|in:In Progress,Completed',
-            'image_before'  => 'nullable|image|max:5120',
             'image_after'   => 'nullable|image|max:5120',
         ]);
 
         // Store uploaded files and resolve paths
-        $imageBefore = $request->hasFile('image_before')
-            ? $request->file('image_before')->store('projects', 'public')
-            : null;
-
         $imageAfter = $request->hasFile('image_after')
             ? $request->file('image_after')->store('projects', 'public')
             : null;
 
-        // image_path = primary display image (after → fallback to before)
-        $primaryImage = $imageAfter ?? $imageBefore;
+        // image_path = primary display image
+        $primaryImage = $imageAfter;
 
         Project::create([
             'title'         => $validated['title_ar'],
@@ -69,7 +69,6 @@ class ProjectController extends Controller
             'category'      => 'required|string|max:100',
             'description_ar' => 'nullable|string',
             'status'        => 'required|in:In Progress,Completed',
-            'image_before'  => 'nullable|image|max:5120',
             'image_after'   => 'nullable|image|max:5120',
         ]);
 

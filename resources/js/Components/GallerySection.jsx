@@ -40,25 +40,25 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                 <div className="max-w-7xl mx-auto px-4">
                     {/* Heading */}
                     <div className="text-center mb-14">
-                        <span className="inline-block text-[#16A34A] font-bold tracking-widest text-xs uppercase mb-3">معرض أعمالنا</span>
+                        <span className="inline-block text-primary font-bold tracking-widest text-xs uppercase mb-3">معرض أعمالنا</span>
                         <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-3">{title}</h2>
                         {subtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>}
-                        <div className="w-20 h-1 bg-gradient-to-r from-[#4ADE80] to-[#16A34A] mx-auto mt-5 rounded-full"></div>
+                        <div className="w-20 h-1 bg-gradient-to-r from-[#D4AF37] to-primary mx-auto mt-5 rounded-full"></div>
                     </div>
 
-                    {/* Grid — 2 cols on mobile, 3 on md, 4 on xl */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {/* Grid — 1 col on mobile, 2 on sm, 3 on lg */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {images.map((img, idx) => (
                             <button
                                 key={img.id}
                                 onClick={() => setLightboxIndex(idx)}
-                                className="group relative rounded-2xl overflow-hidden shadow-lg focus:outline-none focus:ring-2 focus:ring-[#16A34A] bg-black"
-                                style={{ aspectRatio: '4/3' }}
+                                className="group relative rounded-3xl overflow-hidden shadow-xl focus:outline-none focus:ring-2 focus:ring-[#C5A059] bg-black transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)]"
+                                style={{ aspectRatio: '16/11' }}
                             >
                                 {/* Image */}
                                 <img
                                     src={`/storage/${img.image_path}`}
-                                    alt={img.title || 'صورة أعمال'}
+                                    alt={img.alt_text || img.title || 'صورة أعمال'}
                                     width="400"
                                     height="300"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-60"
@@ -80,7 +80,7 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                                 </div>
 
                                 {/* Gold corner accent */}
-                                <div className="absolute top-0 left-0 w-0 group-hover:w-1 h-full bg-[#16A34A] transition-all duration-300"></div>
+                                <div className="absolute top-0 left-0 w-0 group-hover:w-1 h-full bg-primary transition-all duration-300"></div>
                             </button>
                         ))}
                     </div>
@@ -133,7 +133,7 @@ export default function GallerySection({ images = [], title = 'معرض الأع
                     >
                         <img
                             src={`/storage/${currentImg.image_path}`}
-                            alt={currentImg.title || 'صورة أعمال'}
+                            alt={currentImg.alt_text || currentImg.title || 'صورة أعمال'}
                             className="max-h-[80vh] max-w-full object-contain rounded-2xl shadow-2xl"
                         />
                         {currentImg.title && (

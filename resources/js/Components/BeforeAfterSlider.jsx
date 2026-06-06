@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-export default function BeforeAfterSlider({ beforeImage, afterImage }) {
+export default function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt = 'قبل التنفيذ', afterAlt = 'بعد التنفيذ' }) {
     const [sliderPos, setSliderPos] = useState(50);
     const containerRef = useRef(null);
     const isDragging = useRef(false);
@@ -53,12 +53,12 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }) {
     return (
         <div 
             ref={containerRef}
-            className="relative w-full h-[400px] md:h-[600px] rounded-3xl overflow-hidden select-none shadow-2xl group bg-[#064E3B]"
+            className="relative w-full h-[400px] md:h-[600px] rounded-3xl overflow-hidden select-none shadow-2xl group bg-gray-100 dark:bg-surface-dark"
         >
             {/* Before Image (Background) */}
             <img 
                 src={beforeImage} 
-                alt="Before" 
+                alt={beforeAlt} 
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
                 onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80'; }}
             />
@@ -70,7 +70,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }) {
             >
                 <img 
                     src={afterImage} 
-                    alt="After" 
+                    alt={afterAlt} 
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://images.unsplash.com/photo-1558904541-efa843a96f0f?auto=format&fit=crop&w=1000&q=80'; }}
                 />
@@ -84,9 +84,9 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }) {
                 onTouchStart={handleDown}
             >
                 {/* The visual line */}
-                <div className="absolute top-0 bottom-0 w-1 bg-[#22C55E] shadow-[0_0_15px_rgba(34,197,94,0.8)] pointer-events-none"></div>
+                <div className="absolute top-0 bottom-0 w-1 bg-[#C5A059] shadow-[0_0_15px_rgba(197, 160, 89, 0.8)] pointer-events-none"></div>
                 {/* The circular handle */}
-                <div className="w-12 h-12 rounded-full bg-[#064E3B] border-2 border-[#22C55E] shadow-lg flex items-center justify-center text-[#22C55E] group-hover:scale-110 transition-transform z-20">
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-surface-dark border-2 border-[#C5A059] shadow-lg flex items-center justify-center text-[#C5A059] group-hover:scale-110 transition-transform z-20">
                     <span className="material-symbols-outlined text-[24px] transform rotate-90 pointer-events-none">unfold_more</span>
                 </div>
             </div>
@@ -95,7 +95,7 @@ export default function BeforeAfterSlider({ beforeImage, afterImage }) {
             <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-md text-white px-5 py-2 text-sm font-bold rounded-xl pointer-events-none z-10 border border-white/20">
                 قبل التنفيذ
             </div>
-            <div className="absolute top-6 left-6 bg-[#22C55E]/90 backdrop-blur-md text-white px-5 py-2 text-sm font-bold rounded-xl pointer-events-none z-10 shadow-lg">
+            <div className="absolute top-6 left-6 bg-[#C5A059]/90 backdrop-blur-md text-white px-5 py-2 text-sm font-bold rounded-xl pointer-events-none z-10 shadow-lg">
                 بعد التنفيذ
             </div>
         </div>

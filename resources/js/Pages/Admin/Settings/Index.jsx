@@ -12,16 +12,19 @@ const SETTINGS_SCHEMA = {
     general: [
         { key: "site_name", label: "اسم الموقع", type: "text" },
         { key: "contact_email", label: "البريد الإلكتروني", type: "email" },
-        { key: "contact_phone", label: "رقم الهاتف", type: "text" },
+        { key: "contact_phone", label: "رقم الهاتف (اتصال مباشر)", type: "text" },
+        { key: "contact_whatsapp", label: "رقم الواتساب", type: "text" },
         { key: "address", label: "العنوان", type: "text" },
+        { key: "map_url", label: "رابط الخريطة (Google Maps Embed)", type: "text" },
         { key: "working_hours", label: "ساعات العمل", type: "text" },
         { key: "site_logo", label: "شعار الموقع", type: "image" },
     ],
 
     social: [
         { key: "facebook_url", label: "رابط فيسبوك", type: "text" },
-        { key: "twitter_url", label: "رابط أكس", type: "text" },
+        { key: "twitter_url", label: "رابط أكس (تويتر)", type: "text" },
         { key: "instagram_url", label: "رابط انستغرام", type: "text" },
+        { key: "tiktok_url", label: "رابط تيك توك", type: "text" },
     ],
 
     seo: [
@@ -126,14 +129,29 @@ export default function SettingsIndex({ settings, auth }) {
                     <div className="flex items-center gap-4">
 
                         {setting.value && (
-                            <img
-                                src={
-                                    setting.value.startsWith("http")
-                                        ? setting.value
-                                        : `/storage/${setting.value}`
-                                }
-                                className="h-14 w-14 bg-white rounded p-1"
-                            />
+                            <div className="relative group shrink-0">
+                                <img
+                                    src={
+                                        setting.value.startsWith("http")
+                                            ? setting.value
+                                            : `/storage/${setting.value}`
+                                    }
+                                    className="h-14 w-14 bg-white rounded p-1 object-contain"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        updateSetting(setting.key, "value", "");
+                                        updateSetting(setting.key, "file", null);
+                                    }}
+                                    className="absolute -top-2 -left-2 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow-md transition"
+                                    title="حذف الصورة"
+                                >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
                         )}
 
                         <input

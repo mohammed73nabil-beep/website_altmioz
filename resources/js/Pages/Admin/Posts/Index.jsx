@@ -84,7 +84,7 @@ export default function PostsIndex({ posts = { data: [], links: [] } }) {
                                         <td className="px-6 py-4">
                                             <button
                                                 onClick={() => togglePublish(post.slug)}
-                                                className={`inline-flex px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${post.is_published ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20' : 'bg-slate-500/10 text-slate-500 hover:bg-slate-500/20'}`}
+                                                className={`inline-flex px-2.5 py-1 rounded-md text-[10px] font-bold transition-all ${post.is_published ? 'bg-primary/10 text-primary hover:bg-primary/20' : 'bg-slate-500/10 text-slate-500 hover:bg-slate-500/20'}`}
                                             >
                                                 {post.is_published ? 'منشور' : 'مسودة'}
                                             </button>

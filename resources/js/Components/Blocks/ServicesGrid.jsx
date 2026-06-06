@@ -8,7 +8,7 @@ export default function ServicesGrid({ data }) {
     const dynamicServices = [
         { 
             id: 1, 
-            title: pageContents?.['home.services.maintenance.title'] || 'تنسيق الحدائق', 
+            title: pageContents?.['home.services.maintenance.title'] || 'ديكورات داخلية', 
             icon: pageContents?.['home.services.maintenance.icon'] || 'yard', 
             desc: pageContents?.['home.services.maintenance.description'] || 'تصاميم خارجية مذهلة وتحويل المساحات.' 
         },
@@ -20,13 +20,13 @@ export default function ServicesGrid({ data }) {
         },
         { 
             id: 3, 
-            title: pageContents?.['home.services.portacabins.title'] || 'العشب الصناعي', 
+            title: pageContents?.['home.services.portacabins.title'] || 'بديل الرخام', 
             icon: pageContents?.['home.services.portacabins.icon'] || 'grass', 
             desc: pageContents?.['home.services.portacabins.description'] || 'أفضل أنواع العشب المعتمد عالمياً.' 
         },
         { 
             id: 4, 
-            title: pageContents?.['home.services.renovation.title'] || 'نوافير وشلالات', 
+            title: pageContents?.['home.services.renovation.title'] || 'ديكورات منزلية وديكورات مائية', 
             icon: pageContents?.['home.services.renovation.icon'] || 'pool', 
             desc: pageContents?.['home.services.renovation.description'] || 'إضافة لمسة مائية ساحرة.' 
         },
@@ -48,27 +48,27 @@ export default function ServicesGrid({ data }) {
     const servicesToDisplay = dynamicServices.slice(0, limit);
 
     return (
-        <section className="py-24 relative bg-[#f8f7f6] dark:bg-[#022C22] z-20">
+        <section className="py-24 relative bg-background-light dark:bg-background-dark z-20">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center mb-16">
-                    <span className="text-[#16A34A] font-bold tracking-widest text-sm uppercase block mb-3">{pageContents?.['home.services.badge'] || 'مجالات التخصص'}</span>
+                    <span className="text-primary font-bold tracking-widest text-sm uppercase block mb-3">{pageContents?.['home.services.badge'] || 'مجالات التخصص'}</span>
                     <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">
                         {pageContents?.['home.services.title'] || data?.heading?.ar || 'خدماتنا المميزة'}
                     </h2>
-                    <div className="w-24 h-1 bg-gradient-to-r from-[#16A34A] to-[#4ADE80] mx-auto mt-6 rounded-full"></div>
+                    <div className="w-24 h-1 bg-gradient-to-r from-primary to-[#D4AF37] mx-auto mt-6 rounded-full"></div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {servicesToDisplay.map((service) => (
-                        <div key={service.id} className={`bg-white dark:bg-[#064E3B] p-10 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 dark:border-white/5 hover:-translate-y-2 hover:border-[#16A34A]/50 transition-all duration-500 group`}>
-                            <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-[#022C22] flex items-center justify-center text-[#16A34A] mb-6 group-hover:bg-[#16A34A] group-hover:text-[#064E3B] transition-colors border border-gray-100 dark:border-white/5 group-hover:border-transparent">
+                        <div key={service.id} className={`bg-white dark:bg-surface-dark p-10 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.05)] border border-gray-100 dark:border-white/5 hover:-translate-y-2 hover:border-primary/50 transition-all duration-500 group`}>
+                            <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-background-dark flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-slate-900 transition-colors border border-gray-100 dark:border-white/5 group-hover:border-transparent">
                                 <DynamicIcon name={service.icon} className="text-3xl" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-[#16A34A] transition-colors">{service.title}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
                             <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 text-sm">
                                 {service.desc}
                             </p>
-                            <Link href={route('services.index')} className="inline-flex items-center gap-2 text-[#064E3B] dark:text-white font-bold group-hover:text-[#16A34A] transition-colors text-sm">
+                            <Link href={route('services.index')} className="inline-flex items-center gap-2 text-slate-900 dark:text-white font-bold group-hover:text-primary transition-colors text-sm">
                                 عرض الخدمة
                                 <DynamicIcon name="arrow_forward" className="text-sm rotate-180" />
                             </Link>

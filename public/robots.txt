@@ -18,4 +18,4 @@ Allow: /our-projects/
 Allow: /blog/
 
 # Sitemap
-Sitemap: http://localhost/sitemap.xml
+Sitemap: https://decorsar.com/sitemap.xml

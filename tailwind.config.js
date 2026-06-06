@@ -14,11 +14,11 @@ export default {
     theme: {
         extend: {
             colors: {
-                "primary": "#22C55E",
-                "background-light": "#f8f7f6",
-                "background-dark": "#121212",
-                "surface-dark": "#1e1e1e",
-                "sidebar-dark": "#0a0a0a",
+                "primary": "#C5A059",
+                "background-light": "#FDFBF7",
+                "background-dark": "#0F172A",
+                "surface-dark": "#1E293B",
+                "sidebar-dark": "#0B1120",
             },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],

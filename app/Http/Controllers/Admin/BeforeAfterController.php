@@ -31,13 +31,33 @@ class BeforeAfterController extends Controller
             return back()->withErrors(['before_image' => 'عذراً، لا يمكن رفع أكثر من 8 فروقات. الرجاء حذف بعض الصور القديمة أولاً.']);
         }
 
-        $beforePath = ImageOptimizer::storeAsWebP($request->file('before_image'), 'before_after');
-        $afterPath = ImageOptimizer::storeAsWebP($request->file('after_image'), 'before_after');
+        // Automatically translate title to English for SEO naming and alt text
+        $altText = null;
+        if (!empty($request->title)) {
+            $altText = \App\Helpers\TranslationHelper::translateArabicToEnglish($request->title);
+        }
+
+        $beforePath = ImageOptimizer::storeAsWebP(
+            $request->file('before_image'),
+            'before_after',
+            1280, 720, 65,
+            null,
+            $altText ? $altText . '-before' : null
+        );
+
+        $afterPath = ImageOptimizer::storeAsWebP(
+            $request->file('after_image'),
+            'before_after',
+            1280, 720, 65,
+            null,
+            $altText ? $altText . '-after' : null
+        );
 
         $maxOrder = BeforeAfterImage::max('order') ?? 0;
 
         BeforeAfterImage::create([
             'title' => $request->title,
+            'alt_text' => $altText,
             'before_image_path' => $beforePath,
             'after_image_path' => $afterPath,
             'order' => $maxOrder + 1,
@@ -54,8 +74,15 @@ class BeforeAfterController extends Controller
             'after_image' => 'nullable|image|max:10240',
         ]);
 
+        // Automatically translate title to English for SEO naming and alt text
+        $altText = $beforeAfter->alt_text;
+        if ($request->has('title')) {
+            $altText = \App\Helpers\TranslationHelper::translateArabicToEnglish($request->title);
+        }
+
         $payload = [
             'title' => $request->title,
+            'alt_text' => $altText,
         ];
 
         if ($request->hasFile('before_image')) {
@@ -63,7 +90,8 @@ class BeforeAfterController extends Controller
                 $request->file('before_image'),
                 'before_after',
                 1280, 720, 65,
-                $beforeAfter->before_image_path
+                $beforeAfter->before_image_path,
+                $altText ? $altText . '-before' : null
             );
         }
 
@@ -72,7 +100,8 @@ class BeforeAfterController extends Controller
                 $request->file('after_image'),
                 'before_after',
                 1280, 720, 65,
-                $beforeAfter->after_image_path
+                $beforeAfter->after_image_path,
+                $altText ? $altText . '-after' : null
             );
         }
 

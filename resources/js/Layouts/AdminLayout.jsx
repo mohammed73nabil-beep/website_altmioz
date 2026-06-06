@@ -6,13 +6,15 @@ export default function AdminLayout({ header, children }) {
     const { url, props } = usePage();
     const user = props.auth?.user || { name: 'المدير', email: 'admin@admin.com' };
 
-    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const savedMode = localStorage.getItem('adminDarkMode');
         if (savedMode !== null) {
             setIsDarkMode(savedMode === 'true');
+        } else {
+            setIsDarkMode(false);
         }
     }, []);
 
@@ -36,7 +38,7 @@ export default function AdminLayout({ header, children }) {
                 <style>{`
                     body { font-family: 'IBM Plex Sans Arabic', 'Manrope', sans-serif; }
                     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-                    .active-nav { background-color: rgba(219, 166, 31, 0.15); border-right: 4px solid #22C55E; color: #22C55E; }
+                    .active-nav { background-color: rgba(219, 166, 31, 0.15); border-right: 4px solid #C5A059; color: #C5A059; }
                     ::-webkit-scrollbar { width: 6px; }
                     ::-webkit-scrollbar-track { background: transparent; }
                     ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
@@ -44,7 +46,7 @@ export default function AdminLayout({ header, children }) {
                     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(219, 166, 31, 0.2); border-radius: 10px; }
-                    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); }
+                    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: rgba(197, 160, 89, 0.5); }
                 `}</style>
             </Head>
 
@@ -61,7 +63,7 @@ export default function AdminLayout({ header, children }) {
                 <div className="p-8 flex items-center gap-3">
                     <div>
                         <h1 className="text-white text-lg font-bold leading-none">نظام الإدارة</h1>
-                        <p className="text-primary text-[10px] uppercase tracking-widest mt-1 font-semibold">Saargardens.com</p>
+                        <p className="text-primary text-[10px] uppercase tracking-widest mt-1 font-semibold">Decor-Riyadh.com</p>
                     </div>
                 </div>
                 <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar">
@@ -71,13 +73,6 @@ export default function AdminLayout({ header, children }) {
                     >
                         <span className="material-symbols-outlined">dashboard</span>
                         <span className="font-medium">الرئيسية</span>
-                    </Link>
-                    <Link
-                        href={route('admin.contents.index')}
-                        className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all group ${url?.startsWith('/admin/contents') ? 'active-nav' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
-                    >
-                        <span className="material-symbols-outlined">description</span>
-                        <span className="font-medium">المحتويات</span>
                     </Link>
                     <Link
                         href={route('admin.home-video.index')}
@@ -201,7 +196,7 @@ export default function AdminLayout({ header, children }) {
 
                 {/* Footer Meta */}
                 <footer className="flex items-center justify-between px-8 pt-8 pb-4 text-[11px] text-slate-500 font-medium mt-auto shrink-0">
-                    <p>نظام حديقتي لاندسكيب © {new Date().getFullYear()} — صُمِّم بواسطة <a href="https://wa.me/967781582995" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">شركة Aboras Soft</a></p>
+                    <p>شركة مظلات التميز © {new Date().getFullYear()} — صُمِّم بواسطة <a href="https://wa.me/967781582995" target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">شركة Aboras Soft</a></p>
                     <div className="flex items-center gap-4">
                         <a className="hover:text-primary transition-colors" href="#">دعم الفني</a>
                     </div>
